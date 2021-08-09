@@ -17,8 +17,8 @@ exports.internalError = (err, req, res, next) => {
   }
 
   if(err.message === 'CORS') {
-    return res.status(403).json(messageJson.status403);
+    return res.status(401).json(messageJson.status401_IP);
   }
-  
+
 	return res.status(500).json(messageJson.status500);
 };

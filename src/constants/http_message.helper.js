@@ -16,6 +16,10 @@ exports.status401_login_fail = {
 	message: 'Login failed'
 };
 
+exports.status401_IP = {
+	message: 'Unauthorized request IP'
+};
+
 exports.status401_access_token = {
 	message: 'Invalid access token'
 };

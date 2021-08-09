@@ -16,6 +16,7 @@ Update here in the future
 ## Install application
 
 - Make a file .env follow .envsample, make sure you fill the information in .env
+- Open command line:
 
 ```
 npm i
