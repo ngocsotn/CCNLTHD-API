@@ -4,7 +4,6 @@
 	"description": "Project of subject name: Cac Cong nghe Lap Trinh Hien Dai. teacher: Ngo Ngoc Dang Khoa",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node server.js",
 		"dev": "nodemon server.js"
 	},
@@ -12,12 +11,7 @@
 		"type": "git",
 		"url": "git+https://github.com/ngocsotn/CCNLTHD-API.git"
 	},
-	"keywords": [
-		"ccnlthd",
-		"20424027",
-		"20724056",
-		"20424058"
-	],
+	"keywords": [ "ccnlthd", "20424027", "20724056", "20424058" ],
 	"author": "20424027-Pham Thi Minh Hau, 20424056-Nguyen The Ngoc, 20424058-Nguyen Van Nhat",
 	"license": "MIT",
 	"bugs": {

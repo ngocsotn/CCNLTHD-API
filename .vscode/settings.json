@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/117d4ba0-30b7-42f6-b631-92f8d45b9b1e/resourceGroups/ngocsotn/providers/Microsoft.Web/sites/ngocsotn",
-    "appService.deploySubpath": "."
-}
