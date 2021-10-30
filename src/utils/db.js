@@ -1,4 +1,9 @@
 const Sequelize = require('sequelize');
+const fs = require('fs');
+const path = '../../public/certificates/BaltimoreCyberTrustRoot.crt.pem';
+
+const serverCa = [ fs.readFileSync(require.resolve(path), 'utf8') ];
+
 //Connection String
 const db = new Sequelize({
 	dialect: process.env.DB_SQL_TYPE,
@@ -7,9 +12,12 @@ const db = new Sequelize({
 	username: process.env.DB_USERNAME,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
-	// dialectOptions: {
-	// 	useUTC: false // for reading from database
-	// },
+	dialectOptions: {
+		ssl: {
+			rejectUnauthorized: true,
+			ca: serverCa
+		}
+	},
 	timezone: process.env.DB_TIMEZONE,
 	define: {
 		freezeTableName: true,

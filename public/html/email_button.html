@@ -8,12 +8,7 @@
     <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-
-    <!-- CSS Reset : BEGIN -->
     <style>
-
-        /* What it does: Remove spaces around the email design added by some email clients. */
-        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
         html,
 body {
     margin: 0 auto !important;
@@ -22,25 +17,21 @@ body {
     width: 100% !important;
     background: #f1f1f1;
 }
-
 /* What it does: Stops email clients resizing small text. */
 * {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
 }
-
 /* What it does: Centers email on Android 4.4 */
 div[style*="margin: 16px 0"] {
     margin: 0 !important;
 }
-
 /* What it does: Stops Outlook from adding extra spacing to tables. */
 table,
 td {
     mso-table-lspace: 0pt !important;
     mso-table-rspace: 0pt !important;
 }
-
 /* What it does: Fixes webkit padding issue. */
 table {
     border-spacing: 0 !important;
@@ -48,17 +39,14 @@ table {
     table-layout: fixed !important;
     margin: 0 auto !important;
 }
-
 /* What it does: Uses a better rendering method when resizing images in IE. */
 img {
     -ms-interpolation-mode:bicubic;
 }
-
 /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
 a {
     text-decoration: none;
 }
-
 /* What it does: A work-around for email clients meddling in triggered links. */
 *[x-apple-data-detectors],  /* iOS */
 .unstyle-auto-detected-links *,
@@ -114,8 +102,8 @@ img.g-img + div {
 </style>
 <style>
 
-	    .primary{
-	background: #30e3ca;
+.primary{
+	background: #3f51b5;
 }
 .bg_white{
 	background: #ffffff;
@@ -140,7 +128,7 @@ img.g-img + div {
 }
 .btn.btn-primary{
 	border-radius: 5px;
-	background: #30e3ca;
+	background: #3f51b5;
 	color: #ffffff;
 }
 .btn.btn-white{
@@ -178,18 +166,16 @@ body{
 }
 
 a{
-	color: #30e3ca;
+	color: #3f51b5;
 }
 
-table{
-}
 /*LOGO*/
 
 .logo h1{
 	margin: 0;
 }
 .logo h1 a{
-	color: #30e3ca;
+	color: #3f51b5;
 	font-size: 24px;
 	font-weight: 700;
 	font-family: 'Lato', sans-serif;
@@ -217,7 +203,7 @@ table{
 }
 .hero .text h2 span{
 	font-weight: 600;
-	color: #30e3ca;
+	color: #3f51b5;
 }
 
 /*HEADING SECTION*/
@@ -247,7 +233,7 @@ table{
 	content: '';
 	width: 100%;
 	height: 2px;
-	background: #30e3ca;
+	background: #3f51b5;
 	margin: 0 auto;
 }
 
@@ -279,7 +265,6 @@ ul.social li{
 }
 
 /*FOOTER*/
-
 .footer{
 	border-top: 1px solid rgba(0,0,0,.05);
 	color: rgba(0,0,0,.5);
@@ -319,11 +304,6 @@ ul.social li{
       	<tr>
           <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-          		<tr>
-          			<td class="logo" style="text-align: center; align-self: center; align-items: center;">
-			            <h1><a href="{Re_Home_URL}">EzBid</a></h1>
-			          </td>
-          		</tr>
               <tr>
                 <td>
                   <div class="text" style="padding: 0 10%; text-align: center; align-self: center; align-items: center;">
@@ -336,7 +316,7 @@ ul.social li{
 	      </tr><!-- end tr -->
 	      <tr>
           <td valign="middle" class="hero bg_white" style="padding: 3em 0 2em 0;">
-            <img src="cid:{Re_Image}" alt="" style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;">
+            <img src="{Re_Image}" alt="" style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;">
           </td>
 	      </tr><!-- end tr -->
 				<tr>
@@ -347,10 +327,10 @@ ul.social li{
             			<div class="text" style="padding: 0 10%; text-align: center; align-self: center; align-items: center;">
 							<h3>{Re_Content_1}</h3>
 							<h3>{Re_Content_2}</h3>
-            				<br>
-            				<a style="width: 100%; font-size: 30px;" href="{Re_Button_URl}" class="btn btn-primary"> {Re_Button} </a>
-                    <br>
-                    <h3>
+                <br>
+            				<a style="width: 100%; font-size: 30px; display: {Re_Display};" href="{Re_Button_URl}" class="btn btn-primary"> {Re_Button} </a>
+              <br>
+          <h3>
               <br>
               <br>
 						{Re_Thanks_Message}
@@ -405,7 +385,7 @@ ul.social li{
               </tr>
             </table>
           </td>
-        </tr><!-- end: tr -->
+        </tr>
         <tr>
           <td class="bg_light" style="text-align: center;">
           	<p>EzBid © 2021</p>

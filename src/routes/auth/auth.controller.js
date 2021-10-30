@@ -5,10 +5,15 @@ const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const mailer_helper = require('../../helpers/mailer.helper');
 
 module.exports.test = async (req, res) => {
-	const attach = mailer_helper.getAttachments;
-	const html = await mailer_helper.replaceHTML('hello', '1111', '2222', '', '');
+	const html = await mailer_helper.replaceHTML(
+		'Kích hoạt tài khoản',
+		'Bạn vừa đăng ký thành công tài khoản, nhấn nút bên dưới để kích hoạt',
+		'(hoặc có thể dùng mã: SD89hk9237FHker33)',
+		'',
+		'google.com'
+	);
 
-	await mailer_helper.sendHtmlMail('abc@gmail.com', 'email kiểm thử', '1', html, attach);
+	await mailer_helper.send('Kích hoạt tài khoản', 'hepiha9413@datakop.com', 'user', html);
 
 	return res.json('ok');
 };
