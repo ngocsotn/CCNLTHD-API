@@ -15,8 +15,8 @@ Update here in the future
 
 ## Install application
 
-- Make a file .env follow .envsample, make sure you fill the information in .env
-- Open command line:
+- **Make a file .env follow .envsample, make sure you fill the information in .env**
+- **Open command line, and type:**
 
 ```
 npm i
@@ -33,7 +33,13 @@ npm start
 4. [express-async-errors](https://www.npmjs.com/package/express-async-errors) (v3.1.1)
 5. [helmet](https://www.npmjs.com/package/helmet) (v4.6.0)
 6. [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) (v8.5.1)
-7. [knex](https://www.npmjs.com/package/knex) (v0.95.9)
+7. [sequelize](https://www.npmjs.com/package/knex) (v6.8.0)
 8. [morgan](https://www.npmjs.com/package/morgan) (v1.10.0)
 9. [ajv](https://www.npmjs.com/package/ajv) (v8.6.2)
 10. [nodemailer](https://www.npmjs.com/package/nodemailer) (v6.6.3)
+11. [moment](https://www.npmjs.com/package/moment) (2.29.1)
+12. [cloudinary](https://www.npmjs.com/package/cloudinary) (1.27.1)
+13. [bcrypt](https://www.npmjs.com/package/bcrypt) (5.0.1)
+14. [mysql2](https://www.npmjs.com/package/mysql2) (2.3.0)
+15. [multer](https://www.npmjs.com/package/multer) (1.4.3)
+16. [body-parser](https://www.npmjs.com/package/body-parser) (1.19.0)
