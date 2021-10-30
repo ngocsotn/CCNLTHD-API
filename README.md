@@ -36,7 +36,7 @@ npm start
 7. [sequelize](https://www.npmjs.com/package/knex) (v6.8.0)
 8. [morgan](https://www.npmjs.com/package/morgan) (v1.10.0)
 9. [ajv](https://www.npmjs.com/package/ajv) (v8.6.2)
-10. [nodemailer](https://www.npmjs.com/package/nodemailer) (v6.6.3)
+10. [sib-api-v3-sdk](https://www.npmjs.com/package/sib-api-v3-sdk) (v8.2.1)
 11. [moment](https://www.npmjs.com/package/moment) (2.29.1)
 12. [cloudinary](https://www.npmjs.com/package/cloudinary) (1.27.1)
 13. [bcrypt](https://www.npmjs.com/package/bcrypt) (5.0.1)

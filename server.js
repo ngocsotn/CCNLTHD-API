@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 }
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || process.env.SERVER_PORT || 3000;
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
