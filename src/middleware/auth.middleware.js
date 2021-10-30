@@ -1,12 +1,12 @@
 const myJWT = require('../helpers/jwt.helper');
-const httpMessage = require('../constants/http_message.helper');
+const httpMessage = require('../constants/http_message.constant');
 
 module.exports.authJWT = () => {
 	return (req, res, next) => {
-		const accessToken = myJWT.getAccessTokenFromHeader(req);
+		const token = myJWT.getAccessTokenFromHeader(req);
 		// console.log(req.headers);
-		if (accessToken) {
-			const decoded = myJWT.verifyAccessToken(accessToken);
+		if (token) {
+			const decoded = myJWT.verifyAccessToken(token);
 			if (decoded) {
 				return next();
 			} else {

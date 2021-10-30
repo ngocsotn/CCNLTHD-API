@@ -1,5 +1,5 @@
 const address = require('../helpers/addresser.helper');
-const messageJson = require('../constants/http_message.helper');
+const messageJson = require('../constants/http_message.constant');
 
 exports.nullRoute = (req, res, next) => {
 	return res.status(404).json(messageJson.status404);

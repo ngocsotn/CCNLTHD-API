@@ -1,23 +1,25 @@
-// library: pg for PostgreSQL and Amazon Redshift, mysql/mysql2 for MySQL or MariaDB, sqlite3 for SQLite3, tedious for MSSQL.
-
-//can use for pg, mysql, maria db, mssql
-const knexSetting = {
-	client: process.env.DB_SQL_TYPE,
-	connection: {
-		host: process.env.DB_IP || '127.0.0.1',
-		user: process.env.DB_USERNAME,
-		password: process.env.DB_PASSWORD,
-		port: +process.env.DB_PORT,
-		database: process.env.DB_NAME
+const Sequelize = require('sequelize');
+//Connection String
+const db = new Sequelize({
+	dialect: process.env.DB_SQL_TYPE,
+	host: process.env.DB_IP,
+	port: Number(process.env.DB_PORT),
+	username: process.env.DB_USERNAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	// dialectOptions: {
+	// 	useUTC: false // for reading from database
+	// },
+	timezone: process.env.DB_TIMEZONE,
+	define: {
+		freezeTableName: true,
+		timestamps: false
 	},
 	pool: {
-		min: +process.env.DB_MIN_CONNECT,
-		max: +process.env.DB_MAX_CONNECT
+		max: Number(process.env.DB_MAX_CONNECT),
+		min: Number(process.env.DB_MIN_CONNECT),
+		idle: 5 * 1000 //milliseconds
 	}
-};
+});
 
-if (process.env.DB_SQL_TYPE === 'mssql') {
-	knexSetting.connection.encrypt = true;
-}
-
-module.exports = require('knex')(knexSetting);
+module.exports = db;
