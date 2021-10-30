@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const errorsHandler = require('./src/middleware/errors.middleware');
-const myCors = require('./src/middleware/cors.middleware');
+// const myCors = require('./src/middleware/cors.middleware');
 const cors = require('cors');
 
 // router.use(myCors);

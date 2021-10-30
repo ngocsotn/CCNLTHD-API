@@ -12,12 +12,12 @@ const db = new Sequelize({
 	username: process.env.DB_USERNAME,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
-	// dialectOptions: {
-	// 	ssl: {
-	// 		rejectUnauthorized: true,
-	// 		ca: serverCa
-	// 	}
-	// },
+	dialectOptions: {
+		ssl: process.env.DB_ENABLE_SSL === 'yes' && {
+			rejectUnauthorized: true,
+			ca: serverCa
+		}
+	},
 	timezone: process.env.DB_TIMEZONE,
 	define: {
 		freezeTableName: true,
