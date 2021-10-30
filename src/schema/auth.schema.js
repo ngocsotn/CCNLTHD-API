@@ -21,7 +21,28 @@ exports.registerSchema = {
 		birth: { type: 'string', minLength: 10 }
 	},
 
-	required: [ 'email', 'password' ],
+	required: [ 'email', 'password', 'name', 'address', 'birth' ],
+	additionalProperties: false
+};
+
+exports.forgotSchema = {
+	type: 'object',
+	properties: {
+		email: { type: 'string', pattern: regex_pattern.emailPattern }
+	},
+
+	required: [ 'email' ],
+	additionalProperties: false
+};
+
+exports.recoverySchema = {
+	type: 'object',
+	properties: {
+		password: { type: 'string', minLength: 5 },
+		code: { type: 'string', minLength: 10 }
+	},
+
+	required: [ 'password', 'code' ],
 	additionalProperties: false
 };
 

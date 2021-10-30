@@ -1,4 +1,8 @@
 // 200
+exports.status200 = {
+  message: 'Ok'
+}
+
 exports.status204 = {
 	message: 'Không tìm thấy nội dung'
 };
@@ -15,6 +19,10 @@ exports.status400 = {
 exports.status400_login_fail = {
 	message: 'Email hoặc mật khẩu không hợp lệ'
 };
+
+exports.status400_not_exist_email = {
+  message: 'Email không tồn tại!'
+}
 
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'

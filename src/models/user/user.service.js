@@ -21,7 +21,7 @@ module.exports.findUserByCode = async (code) => {
 };
 
 // INSERT
-module.exports.createNewUser = async (body, refresh_token) => {
+module.exports.createNewUser = async (body, refresh_token, is_admin) => {
 	const { email, name, birth, address, password } = body;
 	const rs = await this.findUserByEmail(email);
 	if (rs) {
@@ -33,9 +33,11 @@ module.exports.createNewUser = async (body, refresh_token) => {
 		name,
 		birth: moment(birth, 'DD/MM/YYYY'), //trong mysql, date sẽ lưu YYYY-MM-DD
 		address,
-		code: await this.createNewCode(10),
+		code: is_admin ? '' : await this.createNewCode(10),
 		refresh_token,
-		password: await bcrypt_helper.hash(password, 10)
+		password: await bcrypt_helper.hash(password, 10),
+		active: is_admin,
+		role: is_admin ? 'admin' : 'bidder'
 	}).catch((err) => {
 		console.log(err);
 		return null;
@@ -49,6 +51,45 @@ module.exports.updateRefreshToken = async (id, refresh_token) => {
 	await User.update(
 		{
 			refresh_token
+		},
+		{
+			where: {
+				id
+			}
+		}
+	);
+};
+
+module.exports.updateCode = async (id, code) => {
+	await User.update(
+		{
+			code
+		},
+		{
+			where: {
+				id
+			}
+		}
+	);
+};
+
+module.exports.updateActive = async (id, active) => {
+	await User.update(
+		{
+			active
+		},
+		{
+			where: {
+				id
+			}
+		}
+	);
+};
+
+module.exports.updatePassword = async (id, password) => {
+	await User.update(
+		{
+			password: await bcrypt_helper.hash(password, 10)
 		},
 		{
 			where: {
