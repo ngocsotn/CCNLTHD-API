@@ -1,8 +1,8 @@
-const Sequelize = require('sequelize');
-const fs = require('fs');
-const path = '../../public/certificates/BaltimoreCyberTrustRoot.crt.pem';
+const Sequelize = require("sequelize");
+const fs = require("fs");
+const path = "../../public/certificates/BaltimoreCyberTrustRoot.crt.pem";
 
-const serverCa = [ fs.readFileSync(require.resolve(path), 'utf8') ];
+const serverCa = [fs.readFileSync(require.resolve(path), "utf8")];
 
 //Connection String
 const db = new Sequelize({
@@ -28,6 +28,7 @@ const db = new Sequelize({
 		min: Number(process.env.DB_MIN_CONNECT),
 		idle: 5 * 1000 //milliseconds
 	}
+
 });
 
 module.exports = db;
