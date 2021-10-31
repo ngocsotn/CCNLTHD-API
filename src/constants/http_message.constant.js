@@ -1,7 +1,7 @@
 // 200
 exports.status200 = {
-  message: 'Ok'
-}
+	message: 'Ok'
+};
 
 exports.status204 = {
 	message: 'Không tìm thấy nội dung'
@@ -21,8 +21,12 @@ exports.status400_login_fail = {
 };
 
 exports.status400_not_exist_email = {
-  message: 'Email không tồn tại!'
-}
+	message: 'Email không tồn tại!'
+};
+
+exports.status400_short_password = {
+	message: 'Mật khẩu bạn nhập quá ngắn, nhập ít nhất 5 ký tự'
+};
 
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
@@ -38,6 +42,10 @@ exports.status401_refresh_token = {
 
 exports.status401_conflict_email = {
 	message: 'Email đã được sử dụng!'
+};
+
+exports.status401_wrong_password = {
+	message: 'Mật khẩu hiện tại không chính xác!'
 };
 
 exports.status403 = {

@@ -18,7 +18,7 @@ exports.registerSchema = {
 		password: { type: 'string', minLength: 5 },
 		name: { type: 'string', minLength: 5 },
 		address: { type: 'string', minLength: 5 },
-		birth: { type: 'string', minLength: 10 }
+		birth: { type: 'string', pattern: regex_pattern.datePattern }
 	},
 
 	required: [ 'email', 'password', 'name', 'address', 'birth' ],

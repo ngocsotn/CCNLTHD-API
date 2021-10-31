@@ -38,7 +38,7 @@ module.exports.registerPost = async (req, res) => {
 
 module.exports.loginPost = async (req, res) => {
 	const { email, password } = req.body;
-	const rs = await user_service.findUserByEmail(email);
+	const rs = await user_service.findUserByEmail(email, []);
 	if (!rs) {
 		return res.status(400).json(http_message.status400_login_fail);
 	}
@@ -70,7 +70,7 @@ module.exports.refreshTokenPost = async (req, res) => {
 
 module.exports.verifyAccount = async (req, res) => {
 	const { code } = req.query || -1;
-	const rs = await user_service.findUserByCode(code);
+	const rs = await user_service.findUserByCode(code, []);
 	if (!rs) {
 		return res.status(400).json(http_message.status400);
 	}
@@ -88,7 +88,7 @@ module.exports.verifyAccount = async (req, res) => {
 
 module.exports.forgotPassword = async (req, res) => {
 	const { email } = req.body;
-	const rs = await user_service.findUserByEmail(email);
+	const rs = await user_service.findUserByEmail(email, []);
 	if (!rs) {
 		return res.status(400).json(http_message.status400_not_exist_email);
 	}
@@ -112,7 +112,7 @@ module.exports.forgotPassword = async (req, res) => {
 module.exports.recoveryPassword = async (req, res) => {
 	const { code, password } = req.body;
 
-	const rs = await user_service.findUserByCode(code);
+	const rs = await user_service.findUserByCode(code, []);
 	if (!rs) {
 		return res.status(400).json(http_message.status400);
 	}
@@ -128,11 +128,4 @@ module.exports.recoveryPassword = async (req, res) => {
 	});
 
 	return res.json({ token, refresh_token: rs.refresh_token });
-};
-
-module.exports.getUsernameGet = async (req, res) => {
-	// const token = myJWT.getAccessTokenFromHeader(req);
-	// const payload = myJWT.verifyAccessToken(token);
-	// const user = await modelSampleService.getUserById(payload.id);
-	// return res.status(200).json(user);
 };

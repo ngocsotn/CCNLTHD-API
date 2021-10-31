@@ -27,6 +27,14 @@ module.exports.verifyAccessToken = (token) => {
 	}
 };
 
+module.exports.getPayloadFromHeaderToken = (req) => {
+  const token = this.getAccessTokenFromHeader(req);
+  if(token) {
+    return this.verifyAccessToken(token);
+  }
+  return null;
+};
+
 module.exports.refreshAccessToken = async (token, refresh_token) => {
 	let payload = null;
 	try {
