@@ -1,6 +1,6 @@
 const jwt_helper = require('../../helpers/jwt.helper');
-const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const http_message = require('../../constants/http_message.constant');
+const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const user_service = require('../../models/user/user.service');
 
 module.exports.profileGet = async (req, res) => {

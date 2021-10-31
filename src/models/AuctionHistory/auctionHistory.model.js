@@ -34,9 +34,9 @@ AuctionHistory.init(
 		last_bid_at: {
 			type: DataTypes.DATE,
 			allowNull: false,
-			defaultValue: moment(new Date()),
+			defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
 			get: function() {
-				return moment(this.getDataValue('last_bid_at')).format('DD/MM/YYYY hh:mm:ss');
+				return moment(this.getDataValue('last_bid_at')).format('DD/MM/YYYY HH:mm:ss');
 			}
 		}
 	},

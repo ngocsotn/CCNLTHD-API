@@ -24,7 +24,7 @@ module.exports.seller = () => {
 		if (token) {
 			const decoded = myJWT.verifyAccessToken(token);
 			if (decoded) {
-				if (decoded.role !== 'seller') {
+				if (decoded.role === 'seller' || decoded.role === 'admin') {
 					return next();
 				} else {
 					return res.status(403).json(httpMessage.status403);
@@ -44,7 +44,7 @@ module.exports.admin = () => {
 		if (token) {
 			const decoded = myJWT.verifyAccessToken(token);
 			if (decoded) {
-				if (decoded.role !== 'admin') {
+				if (decoded.role === 'admin') {
 					return next();
 				} else {
 					return res.status(403).json(httpMessage.status403);

@@ -34,7 +34,7 @@ TradeHistory.init(
 		create_at: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
-			defaultValue: moment(new Date()),
+			defaultValue: moment().format('YYYY-MM-DD'),
 			get: function() {
 				return moment(this.getDataValue('create_at')).format('DD/MM/YYYY');
 			}

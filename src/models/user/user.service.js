@@ -2,26 +2,27 @@ const User = require('./user.model');
 const random_helper = require('../../helpers/random.helper');
 const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const moment = require('moment');
+moment().utcOffset('+07:00');
 
 // SELECT
 module.exports.findUserById = async (id, exclude_arr) => {
 	return await User.findOne({
 		where: { id },
-		attributes: { exclude: exclude_arr }
+		attributes: { exclude: exclude_arr || [] }
 	});
 };
 
 module.exports.findUserByEmail = async (email, exclude_arr) => {
 	return await User.findOne({
 		where: { email },
-		attributes: { exclude: exclude_arr }
+		attributes: { exclude: exclude_arr || [] }
 	});
 };
 
 module.exports.findUserByCode = async (code, exclude_arr) => {
 	return await User.findOne({
 		where: { code },
-		attributes: { exclude: exclude_arr }
+		attributes: { exclude: exclude_arr || [] }
 	});
 };
 
@@ -36,7 +37,7 @@ module.exports.createNewUser = async (body, refresh_token, is_admin) => {
 	const new_data = await User.create({
 		email,
 		name,
-		birth: moment(birth, 'DD/MM/YYYY'), //trong mysql, date sẽ lưu YYYY-MM-DD
+		birth: moment(birth, 'DD/MM/YYYY').format('YYYY-MM-DD'), //trong mysql, date sẽ lưu YYYY-MM-DD HH:mm:ss
 		address,
 		code: is_admin ? '' : await this.createNewCode(10),
 		refresh_token,
@@ -120,7 +121,7 @@ module.exports.updateName = async (id, name) => {
 module.exports.updateBirth = async (id, birth) => {
 	await User.update(
 		{
-			birth: moment(birth, 'DD/MM/YYYY')
+			birth: moment(birth, 'DD/MM/YYYY').format('YYYY-MM-DD')
 		},
 		{
 			where: {
@@ -165,6 +166,30 @@ module.exports.updateEmail = async (id, email) => {
 	} else {
 		return null;
 	}
+};
+
+module.exports.updateIncreaseLike = async (id) => {
+	const rs = await this.findUserById(id, []);
+	await User.update(
+		{
+			point_like: rs.point_like + 1
+		},
+		{
+			where: id
+		}
+	);
+};
+
+module.exports.updateIncreaseDislike = async (id) => {
+	const rs = await this.findUserById(id, []);
+	await User.update(
+		{
+			point_dislike: rs.point_dislike + 1
+		},
+		{
+			where: id
+		}
+	);
 };
 
 // DELETE
