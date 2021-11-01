@@ -11,7 +11,12 @@
 		"type": "git",
 		"url": "git+https://github.com/ngocsotn/CCNLTHD-API.git"
 	},
-	"keywords": [ "ccnlthd", "20424027", "20724056", "20424058" ],
+	"keywords": [
+		"ccnlthd",
+		"20424027",
+		"20724056",
+		"20424058"
+	],
 	"author": "20424027-Pham Thi Minh Hau, 20424056-Nguyen The Ngoc, 20424058-Nguyen Van Nhat",
 	"license": "MIT",
 	"bugs": {

@@ -1,5 +1,7 @@
-const favorite_service = require('../../models/Favorite/favorite.service');
+const favorite_service = require("../../models/Favorite/favorite.service");
 
 module.exports.get = async (req, res) => {
-	return res.json('ok');
+  // const favors = favorite_service.findFavoriteListByUserId(, [])
+
+  return res.json("ok");
 };
