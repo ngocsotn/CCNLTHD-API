@@ -29,6 +29,7 @@ Product.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "on",
     },
     auto_extend: {
       type: DataTypes.BOOLEAN,
@@ -37,6 +38,16 @@ Product.init(
     detail: {
       type: DataTypes.TEXT,
       allowNull: false,
+      defaultValue: "",
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      get: function () {
+        return moment(this.getDataValue("create_at")).format(
+          "DD/MM/YYYY HH:mm:ss"
+        );
+      },
     },
     start_price: {
       type: DataTypes.INTEGER,
