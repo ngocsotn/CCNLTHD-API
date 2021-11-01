@@ -29,7 +29,7 @@ db
 	.sync()
 	.then(() => {
 		app.listen(port, () => {
-			console.log(`Server is listening on port ${port}`);
+			console.log(`\nServer is listening on port ${port}`);
 		});
 	})
 	.catch((err) => {

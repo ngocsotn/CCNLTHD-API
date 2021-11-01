@@ -21,8 +21,8 @@ exports.registerSchema = {
 		birth: { type: 'string', pattern: regex_pattern.datePattern }
 	},
 
-	required: [ 'email', 'password', 'name', 'address', 'birth' ],
-	additionalProperties: false
+	required: [ 'email', 'password', 'name', 'address' ],
+	additionalProperties: true
 };
 
 exports.forgotSchema = {

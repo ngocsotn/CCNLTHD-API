@@ -25,9 +25,13 @@ User.init(
 		},
 		birth: {
 			type: DataTypes.DATEONLY,
-			allowNull: false,
+			allowNull: true,
+			defaultValue: null,
 			get: function() {
-				return moment(this.getDataValue('birth')).format('DD/MM/YYYY');
+				if (this.getDataValue('birth')) {
+					return moment(this.getDataValue('birth')).format('DD/MM/YYYY');
+				}
+				return null;
 			}
 		},
 		address: {
@@ -53,7 +57,12 @@ User.init(
 			allowNull: false,
 			defaultValue: false
 		},
-		point: {
+		point_like: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0
+		},
+		point_dislike: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 0
