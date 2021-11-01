@@ -34,7 +34,7 @@ module.exports.deleteProductImage = async (cloud_id) => {
 	});
 };
 
-module.exports.deleteManyProductImage = async (product_id) => {
+module.exports.deleteManyProductImageByProductId = async (product_id) => {
 	await ProductImage.destroy({
 		where: { product_id }
 	}).catch((err) => {

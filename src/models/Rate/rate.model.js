@@ -28,7 +28,8 @@ Rate.init(
 		},
 		comment: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: true,
+			defaultValue: ''
 		},
 		point: {
 			type: DataTypes.INTEGER,

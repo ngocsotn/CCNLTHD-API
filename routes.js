@@ -1,3 +1,4 @@
+const { init } = require('./src/helpers/init.helper');
 const router = require('express').Router();
 const errorsHandler = require('./src/middleware/errors.middleware');
 // const myCors = require('./src/middleware/cors.middleware');
@@ -20,4 +21,8 @@ router.use('/product', require('./src/routes/product/product.route'));
 //errors
 router.use(errorsHandler.internalError);
 router.use(errorsHandler.nullRoute);
+
+//init after create table
+init();
+
 module.exports = router;

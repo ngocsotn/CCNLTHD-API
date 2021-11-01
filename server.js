@@ -30,6 +30,7 @@ db
 	.then(() => {
 		app.listen(port, () => {
 			console.log(`\nServer is listening on port ${port}`);
+			console.log('But Please wait a few seconds for setting up (init)\n');
 		});
 	})
 	.catch((err) => {

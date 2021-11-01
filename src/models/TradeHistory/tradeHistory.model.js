@@ -28,7 +28,7 @@ TradeHistory.init(
 		},
 		status: {
 			type: DataTypes.STRING,
-			defaultValue: 'ok',
+			defaultValue: 'pending',
 			allowNull: false
 		},
 		create_at: {

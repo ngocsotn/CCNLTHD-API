@@ -11,7 +11,7 @@ module.exports.registerPost = async (req, res) => {
 	const refresh_token = jwt_helper.generateRefreshToken();
 	const rs = await user_service.createNewUser(req.body, refresh_token, is_admin);
 	if (!rs) {
-		return res.status(401).json(http_message.status401_conflict_email);
+		return res.status(400).json({ errs: [ http_message.status400_conflict_email.message ] });
 	}
 
 	const token = jwt_helper.generateAccessToken({
@@ -40,10 +40,10 @@ module.exports.loginPost = async (req, res) => {
 	const { email, password } = req.body;
 	const rs = await user_service.findUserByEmail(email, []);
 	if (!rs) {
-		return res.status(400).json(http_message.status400_login_fail);
+		return res.status(400).json({ errs: [ http_message.status400_login_fail.message ] });
 	}
 	if (!await bcrypt_helper.verify(password, rs.password)) {
-		return res.status(400).json(http_message.status400_login_fail);
+		return res.status(400).json({ errs: [ http_message.status400_login_fail.message ] });
 	}
 
 	const token = jwt_helper.generateAccessToken({
@@ -72,7 +72,7 @@ module.exports.verifyAccount = async (req, res) => {
 	const { code } = req.query || -1;
 	const rs = await user_service.findUserByCode(code, []);
 	if (!rs) {
-		return res.status(400).json(http_message.status400);
+		return res.status(400).json({ errs: [ http_message.status400.message ] });
 	}
 	await user_service.updateCode(rs.id, '');
 	await user_service.updateActive(rs.id, 1);
@@ -90,7 +90,7 @@ module.exports.forgotPassword = async (req, res) => {
 	const { email } = req.body;
 	const rs = await user_service.findUserByEmail(email, []);
 	if (!rs) {
-		return res.status(400).json(http_message.status400_not_exist_email);
+		return res.status(400).json({ errs: [ http_message.status400_not_exist_email.message ] });
 	}
 	const code = await user_service.createNewCode(10);
 	await user_service.updateCode(rs.id, code);
@@ -114,7 +114,7 @@ module.exports.recoveryPassword = async (req, res) => {
 
 	const rs = await user_service.findUserByCode(code, []);
 	if (!rs) {
-		return res.status(400).json(http_message.status400);
+		return res.status(400).json({ errs: [ http_message.status400.message ] });
 	}
 
 	await user_service.updateCode(rs.id, '');

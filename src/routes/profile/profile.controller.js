@@ -1,17 +1,17 @@
-const jwt_helper = require('../../helpers/jwt.helper');
 const http_message = require('../../constants/http_message.constant');
 const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const user_service = require('../../models/user/user.service');
 
 module.exports.profileGet = async (req, res) => {
-	const payload = jwt_helper.getPayloadFromHeaderToken(req);
+  console.log(req.token);
+	const payload = req.token;
 	const rs = await user_service.findUserById(payload.id, [ 'password', 'code', 'refresh_token' ]);
 
 	return res.status(200).json(rs);
 };
 
 module.exports.profilePut = async (req, res) => {
-	const payload = jwt_helper.getPayloadFromHeaderToken(req);
+	const payload = req.token;
 	const { name, email, address, birth, password, new_password } = req.body;
 	const err_message = [];
 

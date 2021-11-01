@@ -16,6 +16,18 @@ exports.status400 = {
 	message: 'Thông tin gửi kèm không hợp lệ'
 };
 
+exports.status400_price = {
+	message: 'Giá tiền phải là số dương, ít nhất 1000'
+};
+
+exports.status400_buy_price = {
+	message: 'Giá mua ngay phải lớn hơn giá khởi điếm ít nhất 1 step'
+};
+
+exports.status400_step_price = {
+	message: 'Bước giá phải bé hơn giá khởi điểm'
+};
+
 exports.status400_login_fail = {
 	message: 'Email hoặc mật khẩu không hợp lệ'
 };
@@ -28,6 +40,10 @@ exports.status400_short_password = {
 	message: 'Mật khẩu bạn nhập quá ngắn, nhập ít nhất 5 ký tự'
 };
 
+exports.status400_conflict_email = {
+	message: 'Email đã được sử dụng!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };
@@ -38,10 +54,6 @@ exports.status401_access_token = {
 
 exports.status401_refresh_token = {
 	message: 'refresh_token không hợp lệ'
-};
-
-exports.status401_conflict_email = {
-	message: 'Email đã được sử dụng!'
 };
 
 exports.status401_wrong_password = {
