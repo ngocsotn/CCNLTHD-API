@@ -14,9 +14,14 @@ Product.init(
 			autoIncrement: true,
 			primaryKey: true
 		},
-		user_id: {
+		seller_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
+		},
+		bidder_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			defaultValue: null
 		},
 		sub_category_id: {
 			type: DataTypes.INTEGER,
@@ -39,6 +44,16 @@ Product.init(
 			type: DataTypes.TEXT,
 			allowNull: false,
 			defaultValue: ''
+		},
+		price: {
+			//giá trả ra để hiện thị cho "giá hiện tại"
+			type: DataTypes.BIGINT,
+			allowNull: true
+		},
+		hidden_price: {
+			// giá "hiện tại" thực tế, dùng để so sánh logic
+			type: DataTypes.BIGINT,
+			allowNull: true
 		},
 		start_price: {
 			type: DataTypes.BIGINT,

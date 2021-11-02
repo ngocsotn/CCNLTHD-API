@@ -1,9 +1,13 @@
 const category = require('./category.model');
 
 // SELECT
-module.exports.getAll = async (exclude_arr) => {
-	return await category.findAll({
-		attributes: { exclude: exclude_arr || [] }
+module.exports.getAll = async (exclude_arr = [], page = null, limit = null) => {
+	page = page ? page : 1;
+  limit = limit ? limit : 999999999;
+	return await category.findAndCountAll({
+		attributes: { exclude: exclude_arr },
+		offset: (+page - 1) * +limit,
+		limit: +limit
 	});
 };
 

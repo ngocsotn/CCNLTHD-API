@@ -3,7 +3,6 @@ const bcrypt_helper = require('../../helpers/bcrypt.helper');
 const user_service = require('../../models/user/user.service');
 
 module.exports.profileGet = async (req, res) => {
-  console.log(req.token);
 	const payload = req.token;
 	const rs = await user_service.findUserById(payload.id, [ 'password', 'code', 'refresh_token' ]);
 

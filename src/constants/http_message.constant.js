@@ -44,6 +44,14 @@ exports.status400_conflict_email = {
 	message: 'Email đã được sử dụng!'
 };
 
+exports.status400_exist_product = {
+	message: 'Không thể xóa vì danh mục con này còn sản phẩm!'
+};
+
+exports.status400_exist_sub_category = {
+	message: 'Không thể xóa vì danh mục này còn danh mục con!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };
@@ -70,5 +78,5 @@ exports.status404 = {
 
 // 500
 exports.status500 = {
-	message: 'Server Error: Server can not handle that!'
+	message: 'Lỗi: server không thể xử lý yêu cầu này!'
 };

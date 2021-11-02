@@ -10,6 +10,6 @@ module.exports.init = () => {
 	addFullTextToProduct();
 
 	setTimeout(() => {
-		console.log('\nServer is ready to go!');
+		console.log('\nServer is READY to go !!!\n');
 	}, 15000);
 };

@@ -3,6 +3,7 @@ const controller = require('./product.controller');
 const { seller, admin } = require('../../middleware/auth.middleware');
 
 router.get('/', controller.ultimateSearchProduct);
+router.get('/:id', controller.getProductDetails);
 router.post('/', seller(), controller.createProductPost);
 router.put('/', seller(), controller.appendProductDetail);
 router.delete('/:id', admin(), controller.deleteProduct);

@@ -1,10 +1,12 @@
 const ProductImage = require('./ProductImage.model');
 
 // SELECT
-module.exports.getImageListByProductId = async (product_id, exclude_arr) => {
+module.exports.getImageListByProductId = async (product_id, exclude_arr = []) => {
+	exclude_arr.push('id', 'full_cloud_id');
+
 	const rs = await ProductImage.findAll({
 		where: { product_id },
-		attributes: { exclude: exclude_arr || [] }
+		attributes: { exclude: exclude_arr }
 	});
 
 	return rs;
