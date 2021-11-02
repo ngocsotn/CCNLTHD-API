@@ -27,7 +27,7 @@ module.exports.registerPost = async (req, res) => {
 			`Chào ${rs.name}, hãy nhấn nút bên dưới để kích hoạt tài khoản.`,
 			`(hoặc có thể dùng mã: ${rs.code})`,
 			'KÍCH HOẠT',
-			`https://www.google.com.vn/search?q=${rs.code}`
+			`${process.env.CLIENT_URL}?code=${rs.code}`
 		);
 
 		await mailer_helper.send('Kích hoạt tài khoản', rs.email, rs.name, html);
@@ -101,7 +101,7 @@ module.exports.forgotPassword = async (req, res) => {
 		`Chào ${rs.name}, hãy nhấn nút bên dưới để tiến hành tạo mật khẩu mới.`,
 		``,
 		'KHÔI PHỤC',
-		`https://www.google.com.vn/search?q=${code}`
+		`${process.env.CLIENT_URL}?code=${rs.code}`
 	);
 
 	await mailer_helper.send('Khôi khục mật khẩu', rs.email, rs.name, html);

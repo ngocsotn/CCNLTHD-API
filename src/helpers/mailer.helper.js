@@ -25,8 +25,8 @@ module.exports.loadHTML = async () => {
 
 module.exports.replaceHTML = async (title, content_1, content_2, button, button_url) => {
 	let html = await this.loadHTML();
-	html = html.replace('{Re_Home_URL}', 'google.com');
-	html = html.replace('{Re_About_URL}', 'google.com');
+	html = html.replace('{Re_Home_URL}', process.env.CLIENT_URL);
+	html = html.replace('{Re_About_URL}', process.env.CLIENT_URL);
 	html = html.replace('{Re_Image}', process.env.SENDINBLUE_LOGO_URL);
 	html = html.replace('{Re_Title}', title);
 	html = html.replace('{Re_Content_1}', content_1);
