@@ -52,6 +52,26 @@ exports.status400_exist_sub_category = {
 	message: 'Không thể xóa vì danh mục này còn danh mục con!'
 };
 
+exports.status400_blocked_user = {
+	message: 'Bạn không thể đấu giá vì đã bị chặn ở sản phẩm này!'
+};
+
+exports.status_400_step_price_bid = {
+	message: 'Giá tiền bước nhảy không hợp lệ!'
+};
+
+exports.status_400_step_price_bid = {
+	message: 'Rất tiếc, giá hiện tại cao hơn rồi!'
+};
+
+exports.status_400_bid_time_over = {
+	message: 'Sản phẩm đã hết thời gian đấu giá!'
+};
+
+exports.status_400_point_is_low = {
+	message: 'Số bị đánh giá tệ của bạn đã bằng hoặc hơn 20%, không thể đấu giá!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };

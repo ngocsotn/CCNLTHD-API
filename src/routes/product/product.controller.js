@@ -78,6 +78,8 @@ module.exports.appendProductDetail = async (req, res) => {
 	const { detail, product_id } = req.body;
 	await product_service.updateAppendDetail(detail, product_id, token.id);
 	const rs = await product_service.getProductDetails(product_id, []);
+	//gửi socket...
+
 	return res.json(rs);
 };
 

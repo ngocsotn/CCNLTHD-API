@@ -100,6 +100,58 @@ module.exports.updateAppendDetail = async (new_detail, product_id, seller_id) =>
 	);
 };
 
+module.exports.updateShowPrice = async (product_id, price) => {
+	await Product.update(
+		{
+			price
+		},
+		{
+			where: { product_id }
+		}
+	);
+};
+
+module.exports.updateHolderAndHiddenPrice = async (product_id, user_id, hidden_price) => {
+	const rs = await this.getProductDetails(product_id, []);
+	const price = Math.min(hidden_price, rs.hidden_price + rs.step_price);
+
+	await Product.update(
+		{
+			bidder_id: user_id,
+			hidden_price: hidden_price,
+			price: price
+		},
+		{
+			where: { product_id }
+		}
+	);
+};
+
+module.exports.updateProductStatus = async (product_id, status = 'off') => {
+	await Product.update(
+		{
+			status
+		},
+		{ where: { product_id } }
+	);
+};
+
+module.exports.updateBuyNow = async (product_id, user_id) => {
+	const rs = await this.getProductDetails(product_id, []);
+
+	await Product.update(
+		{
+			bidder_id: user_id,
+			price: rs.buy_price,
+			hidden_price: rs.buy_price,
+			status: 'off'
+		},
+		{
+			where: { product_id }
+		}
+	);
+};
+
 // DELETE (fake delete)
 module.exports.deleteProductFake = async (product_id) => {
 	await Product.update(

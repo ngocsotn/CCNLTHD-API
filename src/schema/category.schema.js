@@ -1,4 +1,4 @@
-exports.createSchema = {
+exports.createCategorySchema = {
 	type: 'object',
 	properties: {
 		name: { type: 'string', minLength: 5 }
@@ -8,7 +8,7 @@ exports.createSchema = {
 	additionalProperties: false
 };
 
-exports.updateSchema = {
+exports.updateCategorySchema = {
 	type: 'object',
 	properties: {
 		name: { type: 'string', minLength: 5 },

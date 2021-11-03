@@ -1,5 +1,5 @@
-const auctionHistory_service = require("../../models/AuctionHistory/AuctionHistory.service");
+const auctionHistory_service = require('../../models/AuctionHistory/auctionHistory.service');
 
 module.exports.get = async (req, res) => {
-  console.log(req.token);
+	console.log(req.token);
 };
