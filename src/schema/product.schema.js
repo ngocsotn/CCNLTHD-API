@@ -1,14 +1,33 @@
-// const regex_pattern = require("../constants/regex_pattern.constant");
+const regex_pattern = require("../constants/regex_pattern.constant");
 
-// exports.productSchema = {
-//   type: "object",
-//   properties: {
-//     point: { type: "string", minLength: 1 },
-//     user2: { type: "string", minLength: 5 },
-//     comment: { type: "string", minLength: 5 },
-//     product_id: { type: "string", minLength: 5 },
-//   },
+exports.createProductSchema = {
+  type: "object",
+  properties: {
+    sub_category_id: { type: "number" },
+    name: { type: "string", minLength: 5 },
+    start_price: { type: "number" },
+    step_price: { type: "number" },
+    buy_price: { type: "number" },
+    expire_at: { type: "string", pattern: regex_pattern.dateTimePattern },
+  },
 
-//   required: ["point", "user2", "product_id"],
-//   additionalProperties: true,
-// };
+  required: [
+    "sub_category_id",
+    "name",
+    "start_price",
+    "step_price",
+    "buy_price",
+    "expire_at",
+  ],
+  additionalProperties: true,
+};
+
+exports.updateProductSchema = {
+  type: "object",
+  properties: {
+    product_id: { type: "number" },
+  },
+
+  required: ["product_id"],
+  additionalProperties: true,
+};
