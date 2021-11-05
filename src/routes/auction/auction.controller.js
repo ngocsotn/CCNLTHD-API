@@ -5,10 +5,6 @@ const http_message = require('../../constants/http_message.constant');
 const moment = require('moment');
 moment().utcOffset('+07:00');
 
-module.exports.get = async (req, res) => {
-	return res.json('ok');
-};
-
 module.exports.postBlockUser = async (req, res) => {
 	const { user_id, product_id } = req.body;
 	await auction_service.updateStatus(user_id, product_id, 'denied');

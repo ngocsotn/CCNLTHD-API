@@ -3,10 +3,6 @@ const Op = require('sequelize').Op;
 const moment = require('moment');
 moment().utcOffset('+07:00');
 
-module.exports.get = async (req, res) => {
-	console.log(req.token);
-};
-
 // SELECT
 module.exports.findByUserId = async (user_id, exclude_arr = []) => {
 	return await Request.findOne({

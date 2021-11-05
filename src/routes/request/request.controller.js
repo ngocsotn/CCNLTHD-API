@@ -4,9 +4,6 @@ const { getTotalPage } = require('../../helpers/etc.helper');
 const moment = require('moment');
 moment().utcOffset('+07:00');
 
-module.exports.get = async (req, res) => {
-	console.log(req.token);
-};
 //bidder
 module.exports.bidderGet = async (req, res) => {
 	//trả no content = có thể tạo request mới

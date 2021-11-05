@@ -7,7 +7,7 @@ const cors = require('cors');
 // router.use(myCors);
 router.use(cors());
 
-//api
+// api
 router.use('/', require('./src/routes/landing/landing.route'));
 router.use('/auth', require('./src/routes/auth/auth.route'));
 router.use('/image', require('./src/routes/images/images.route'));
@@ -19,12 +19,17 @@ router.use('/category', require('./src/routes/category/category.route'));
 router.use('/product', require('./src/routes/product/product.route'));
 router.use('/user', require('./src/routes/admin/admin.route'));
 router.use('/request', require('./src/routes/request/request.route'));
+router.use('/favorite', require('./src/routes/favorite/favorite.route'));
+router.use('/rate', require('./src/routes/rate/rate.route'));
+router.use('/history', require('./src/routes/auctionHistory/auctionHistory.route'));
+router.use('/trade', require('./src/routes/tradeHistory/tradeHistory.route'));
+router.use('/bid', require('./src/routes/auction/auction.route'));
 
-//errors
+// errors
 router.use(errorsHandler.internalError);
 router.use(errorsHandler.nullRoute);
 
-//init after create table
+// init after create table
 init();
 
 module.exports = router;

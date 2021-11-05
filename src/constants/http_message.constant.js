@@ -76,6 +76,14 @@ exports.status_400_request_alive = {
 	message: 'Yêu cầu xin lên seller chưa hết hạn để tạo thêm!'
 };
 
+exports.status_400_rate_duplicate = {
+	message: 'Bạn đã đánh giá rồi!'
+};
+
+exports.status_400_not_win_bidder = {
+	message: 'Người đấu giá thắng cuộc mới được đánh giá người bán!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };
