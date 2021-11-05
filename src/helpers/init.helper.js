@@ -2,8 +2,12 @@ const db = require('../utils/db');
 
 const addFullTextToProduct = () => {
 	setTimeout(() => {
-		db.query('ALTER TABLE product ADD FULLTEXT(name)');
-	}, 8000);
+		//nếu chưa tồn tại thì thêm index cho cột name
+    //SELECT COUNT(*) FROM information_schema.statistics WHERE table_name='product' AND index_name='name'
+		db.query('ALTER TABLE product ADD FULLTEXT name (name DESC)').catch((err) => {
+			console.log('FULLTEXT ALREADY EXIST, DONT NEED TO CREATE!\n');
+		});
+	}, 2000);
 };
 
 module.exports.init = () => {
@@ -11,5 +15,5 @@ module.exports.init = () => {
 
 	setTimeout(() => {
 		console.log('\nServer is READY to go !!!\n');
-	}, 15000);
+	}, 4000);
 };

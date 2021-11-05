@@ -72,6 +72,10 @@ exports.status_400_point_is_low = {
 	message: 'Số bị đánh giá tệ của bạn đã bằng hoặc hơn 20%, không thể đấu giá!'
 };
 
+exports.status_400_request_alive = {
+	message: 'Yêu cầu xin lên seller chưa hết hạn để tạo thêm!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };

@@ -15,6 +15,6 @@ exports.updateCategorySchema = {
 		category_id: { type: 'number' }
 	},
 
-	required: [ 'name' ],
+	required: [ 'name',  'category_id'],
 	additionalProperties: false
 };

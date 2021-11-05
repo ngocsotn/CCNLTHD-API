@@ -11,6 +11,6 @@ router.post('/block', controller.postBlockUser);
 router.post('/bid', controller.postBidProduct);
 
 // mua ngay
-router.post('/buy', controller.postBidProduct)
+router.post('/buy', controller.postBuyNow);
 
 module.exports = router;

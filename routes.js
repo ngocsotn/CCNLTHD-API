@@ -18,6 +18,7 @@ router.use('/sub-category', require('./src/routes/subCategory/subCategory.route'
 router.use('/category', require('./src/routes/category/category.route'));
 router.use('/product', require('./src/routes/product/product.route'));
 router.use('/user', require('./src/routes/admin/admin.route'));
+router.use('/request', require('./src/routes/request/request.route'));
 
 //errors
 router.use(errorsHandler.internalError);
