@@ -76,7 +76,8 @@ module.exports.createNewProduct = async (body, seller_id) => {
 		start_price,
 		step_price,
 		buy_price,
-		expire_at: moment(expire_at, 'DD/MM/YYYY HH:mm:ss')
+		expire_at: moment(expire_at, 'DD/MM/YYYY HH:mm:ss'),
+		create_at: moment().format('YYYY-MM-DD HH:mm:ss')
 	}).catch((err) => {
 		console.log(err);
 		return null;

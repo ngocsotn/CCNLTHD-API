@@ -12,7 +12,7 @@ module.exports.getSelfFavorite = async (req, res) => {
 
 	// thêm thông tin sản phẩm chi tiết vào cho từng item...
 	for (const item of rs.data) {
-		item.product = await product_combiner.getAllProductDetailsById(item.product_id);
+		item.dataValues.product = await product_combiner.getAllProductDetailsById(item.product_id);
 	}
 
 	return res.json(rs);

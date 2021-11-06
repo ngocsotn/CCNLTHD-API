@@ -69,7 +69,7 @@ module.exports.createNewTrade = async (bidder_id, seller_id, product_id, status 
 		seller_id,
 		product_id,
 		status,
-		create_at: moment().format('DD/MM/YYYY HH:mm:ss')
+		create_at: moment().format('DD/MM/YYYY')
 	}).catch((err) => {
 		console.log(err);
 		return null;

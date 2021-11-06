@@ -40,7 +40,8 @@ module.exports.createNewRequest = async (user_id, message) => {
 		user_id,
 		message,
 		status: 'pending',
-		expire_at: moment().add(7, 'days').format('YYYY-MM-DD')
+		expire_at: moment().add(7, 'days').format('YYYY-MM-DD'),
+		create_at: moment().format('YYYY-MM-DD')
 	}).catch((err) => {
 		console.log(err);
 	});
