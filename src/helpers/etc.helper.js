@@ -15,3 +15,28 @@ module.exports.handlePagingResponse = (list_data, page, limit) => {
 
 	return rs;
 };
+
+module.exports.handleUserInfoInProduct = (user, role) => {
+	if (!user.dataValues) {
+		return {};
+	}
+
+	const rs = {};
+	rs.id = user.id;
+	rs.name = '';
+	if (role === 'bidder') {
+		rs.name = this.maskUsername(user.name);
+	} else {
+		rs.name = user.name;
+	}
+	rs.email = user.email;
+	rs.point = +user.point_like - +user.point_dislike;
+	rs.point_like = user.point_like;
+	rs.point_dislike = user.point_dislike;
+
+	return rs;
+};
+
+module.exports.maskUsername = (name) => {
+	return '*****' + name.slice(parseInt(name.length / 2));
+};

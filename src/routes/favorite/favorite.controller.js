@@ -1,6 +1,7 @@
 const favorite_service = require('../../models/Favorite/favorite.service');
 const { handlePagingResponse } = require('../../helpers/etc.helper');
 const http_message = require('../../constants/http_message.constant');
+const product_combiner = require('../product/product.combiner');
 
 module.exports.getSelfFavorite = async (req, res) => {
 	const token = req.token;
@@ -8,7 +9,11 @@ module.exports.getSelfFavorite = async (req, res) => {
 
 	const list = await favorite_service.findAllByUserId(token.id, page, limit, order_by, order_type, []);
 	const rs = handlePagingResponse(list, page, limit);
+
 	// thêm thông tin sản phẩm chi tiết vào cho từng item...
+	for (const item of rs.data) {
+		item.product = await product_combiner.getAllProductDetailsById(item.product_id);
+	}
 
 	return res.json(rs);
 };

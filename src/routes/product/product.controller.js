@@ -1,7 +1,7 @@
 // controller sẽ gọi hàm từ product.complete.js có sẵn
 const http_message = require('../../constants/http_message.constant');
 const product_service = require('../../models/Product/Product.service');
-const product_image_service = require('../../models/ProductImage/ProductImage.service');
+const product_combiner = require('./product.combiner');
 const jwt_helper = require('../../helpers/jwt.helper');
 const { handlePagingResponse } = require('../../helpers/etc.helper');
 
@@ -24,11 +24,9 @@ module.exports.ultimateSearchProduct = async (req, res) => {
 
 	const rs = handlePagingResponse(list, page, limit);
 
-	//thêm ảnh hiển thị
-	if (list) {
-		for (const item of rs.data) {
-			item.dataValues.images = await product_image_service.getImageListByProductId(item.product_id);
-		}
+	//thêm thông ảnh, holder, seller...
+	if (rs) {
+		rs.data = await product_combiner.addFieldForArrayProduct(rs.data);
 	}
 
 	return res.json(rs);
@@ -37,10 +35,9 @@ module.exports.ultimateSearchProduct = async (req, res) => {
 module.exports.getProductDetails = async (req, res) => {
 	const product_id = req.params.id;
 
-	const rs = await product_service.getProductDetails(product_id, []);
-	if (rs) {
-		rs.dataValues.images = await product_image_service.getImageListByProductId(rs.product_id);
-	} else {
+	const rs = await product_combiner.getAllProductDetailsById(product_id);
+
+	if (rs === {}) {
 		return res.status(204).json({});
 	}
 
