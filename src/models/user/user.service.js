@@ -5,7 +5,6 @@ const moment = require('moment');
 moment().utcOffset('+07:00');
 
 module.exports.getAllUser = async (exclude_arr = [], page = null, limit = null) => {
-
 	page = page ? page : 1;
 	limit = limit ? limit : 9999999999;
 
@@ -187,7 +186,7 @@ module.exports.updateIncreaseLike = async (id) => {
 			point_like: rs.point_like + 1
 		},
 		{
-			where: id
+			where: { id }
 		}
 	);
 };
@@ -199,7 +198,7 @@ module.exports.updateIncreaseDislike = async (id) => {
 			point_dislike: rs.point_dislike + 1
 		},
 		{
-			where: id
+			where: { id }
 		}
 	);
 };

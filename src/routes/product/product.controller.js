@@ -3,14 +3,13 @@ const http_message = require('../../constants/http_message.constant');
 const product_service = require('../../models/Product/Product.service');
 const product_image_service = require('../../models/ProductImage/ProductImage.service');
 const jwt_helper = require('../../helpers/jwt.helper');
-const { getTotalPage } = require('../../helpers/etc.helper');
+const { handlePagingResponse } = require('../../helpers/etc.helper');
 
 module.exports.ultimateSearchProduct = async (req, res) => {
 	const token = jwt_helper.getPayloadFromHeaderToken(req) || { id: null };
 
 	const { sub_category_id, keyword, page, limit, order_by, order_type, is_self } = req.query;
 
-	const rs = {};
 	const list = await product_service.getUltimate(
 		sub_category_id,
 		keyword,
@@ -23,10 +22,7 @@ module.exports.ultimateSearchProduct = async (req, res) => {
 		token.id
 	);
 
-	rs.count = list.count || 0;
-	rs.data = list.rows || [];
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+	const rs = handlePagingResponse(list, page, limit);
 
 	//thêm ảnh hiển thị
 	if (list) {

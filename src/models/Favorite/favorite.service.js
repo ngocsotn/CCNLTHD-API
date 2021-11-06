@@ -1,23 +1,32 @@
 const Favorite = require('./favorite.model');
 
 // SELECT
-module.exports.findFavoriteListByUserId = async (user_id, exclude_arr, page = null, limit = null) => {
-	if (page !== null && page < 1) {
-		throw Error('Trang phải lớn hơn 0');
-	}
+module.exports.findAllByUserId = async (
+	user_id,
+	page = 1,
+	limit = 9999999,
+	order_by = 'id',
+	order_type = 'DESC',
+	exclude_arr = []
+) => {
+	page = page ? page : 1;
+	limit = limit ? limit : 999999999;
 
-	if (!limit) {
-		return Favorite.findAll({
-			where: { user_id },
-			attributes: { exclude: exclude_arr || [] }
-		});
-	}
-
-	return Favorite.findAll({
+	return await Favorite.findAndCountAll({
 		where: { user_id },
-		attributes: { exclude: exclude_arr || [] },
-		offset: (page - 1) * limit,
-		limit
+		attributes: { exclude: exclude_arr },
+		offset: (+page - 1) * +limit,
+		limit: +limit,
+		order: [ [ order_by, order_type ] ]
+	});
+};
+
+module.exports.findByUserIdAndProductId = async (user_id, product_id) => {
+	return await Favorite.findOne({
+		where: {
+			user_id,
+			product_id
+		}
 	});
 };
 

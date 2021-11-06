@@ -1,17 +1,17 @@
 const rate_service = require('../../models/Rate/rate.service');
+const user_service = require('../../models/user/user.service');
 const trade_service = require('../../models/TradeHistory/TradeHistory.service');
-const { getTotalPage } = require('../../helpers/etc.helper');
+const { handlePagingResponse } = require('../../helpers/etc.helper');
 const http_message = require('../../constants/http_message.constant');
 
 module.exports.getSelfRate = async (req, res) => {
 	const token = req.token;
 	const { page, limit, order_by, order_type } = req.query;
-	const rs = {};
+
 	const list = await rate_service.findAllByUserId2(token.id, page, limit, order_by, order_type, []);
-	rs.count = list.count;
-	rs.data = list.rows;
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+
+	const rs = handlePagingResponse(list, page, limit);
+	// thêm thông tin sản phẩm chi tiết vào cho từng item...
 
 	return res.json(rs);
 };
@@ -19,16 +19,15 @@ module.exports.getSelfRate = async (req, res) => {
 module.exports.getOtherUserId = async (req, res) => {
 	const { page, limit, order_by, order_type } = req.query;
 	const user_id = req.params.id;
-	const rs = {};
+
 	const list = await rate_service.findAllByUserId2(user_id, page, limit, order_by, order_type, []);
-	if (!rs) {
+
+	if (!list) {
 		return res.status(204).json({});
 	}
 
-	rs.count = list.count;
-	rs.data = list.rows;
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+	const rs = handlePagingResponse(list, page, limit);
+	// thêm thông tin sản phẩm chi tiết vào cho từng item...
 
 	return res.json(rs);
 };
@@ -50,6 +49,12 @@ module.exports.bidderCreateRate = async (req, res) => {
 	}
 
 	const rs = await rate_service.createNewRate(token.id, user_id_2, product_id, comment, point);
+	if (+point === -1) {
+		await user_service.updateIncreaseDislike(user_id_2);
+	} else if (+point === 1) {
+		await user_service.updateIncreaseLike(user_id_2);
+	}
+	// thêm thông tin sản phẩm chi tiết vào cho từng item...
 
 	return res.json(rs);
 };

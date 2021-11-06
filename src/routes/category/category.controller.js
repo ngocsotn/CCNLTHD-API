@@ -1,6 +1,6 @@
 const category_service = require('../../models/Category/category.service');
 const subCategory_service = require('../../models/SubCategory/subCategory.service');
-const { getTotalPage } = require('../../helpers/etc.helper');
+const { handlePagingResponse } = require('../../helpers/etc.helper');
 const http_message = require('../../constants/http_message.constant');
 
 module.exports.getNestedCategory = async (req, res) => {
@@ -29,12 +29,8 @@ module.exports.getNestedCategory = async (req, res) => {
 
 module.exports.getCategory = async (req, res) => {
 	const { page, limit } = req.query;
-	const rs = {};
 	const list = await category_service.getAll([], page, limit);
-	rs.count = list.count;
-	rs.data = list.rows;
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+	const rs = handlePagingResponse(list, page, limit);
 
 	return res.json(rs);
 };

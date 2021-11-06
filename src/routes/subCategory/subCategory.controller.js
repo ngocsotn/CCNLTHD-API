@@ -1,16 +1,12 @@
 const subCategory_service = require('../../models/SubCategory/subCategory.service');
 const http_message = require('../../constants/http_message.constant');
 const product_service = require('../../models/Product/Product.service');
-const { getTotalPage } = require('../../helpers/etc.helper');
+const { handlePagingResponse } = require('../../helpers/etc.helper');
 
 module.exports.getByCategory = async (req, res) => {
 	const { limit, page, category_id } = req.query;
-	const rs = {};
 	const list = await subCategory_service.getAllByCategoryId(category_id, [], page, limit);
-	rs.count = list.count;
-	rs.data = list.rows;
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+	const rs = handlePagingResponse(list, page, limit);
 
 	return res.json(rs);
 };

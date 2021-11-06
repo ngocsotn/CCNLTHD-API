@@ -84,6 +84,10 @@ exports.status_400_not_win_bidder = {
 	message: 'Người đấu giá thắng cuộc mới được đánh giá người bán!'
 };
 
+exports.status_400_favorite_duplicate = {
+	message: 'Đã tồn tại trong danh sách của bạn rồi!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };

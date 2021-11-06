@@ -1,15 +1,11 @@
 const user_service = require('../../models/user/user.service');
 const http_message = require('../../constants/http_message.constant');
-const { getTotalPage } = require('../../helpers/etc.helper');
+const { handlePagingResponse } = require('../../helpers/etc.helper');
 
 module.exports.getAllUser = async (req, res) => {
 	const { limit, page } = req.query;
-	const rs = {};
 	const list = await user_service.getAllUser([ 'password', 'code', 'refresh_token' ], page, limit);
-	rs.count = list.count;
-	rs.data = list.rows;
-	rs.page = +page;
-	rs.total_page = getTotalPage(rs.count, limit);
+	const rs = handlePagingResponse(list, page, limit);
 
 	return res.json(rs);
 };
