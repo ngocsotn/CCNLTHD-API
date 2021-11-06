@@ -14,5 +14,5 @@ exports.updateProfileSchema = {
 	},
 
 	required: [],
-	additionalProperties: false
+	additionalProperties: true
 };
