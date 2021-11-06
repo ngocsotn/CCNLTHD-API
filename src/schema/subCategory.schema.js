@@ -1,22 +1,22 @@
 exports.createSubCategorySchema = {
-  type: "object",
-  properties: {
-    category_id: { type: "number" },
-    name: { type: "string", minLength: 5 },
-  },
+	type: 'object',
+	properties: {
+		category_id: { type: 'number' },
+		name: { type: 'string', minLength: 5 }
+	},
 
-  required: ["category_id", "name"],
-  additionalProperties: true,
+	required: [ 'category_id', 'name' ],
+	additionalProperties: false
 };
 
 exports.updateSubCategorySchema = {
-  type: "object",
-  properties: {
-    sub_category_id: { type: "number" },
-    name: { type: "string", minLength: 5 },
-    category_id: { type: "number" },
-  },
+	type: 'object',
+	properties: {
+		sub_category_id: { type: 'number' },
+		name: { type: 'string', minLength: 5 },
+		category_id: { type: 'number' }
+	},
 
-  required: ["sub_category_id", "name", "category_id"],
-  additionalProperties: true,
+	required: [ 'sub_category_id' ],
+	additionalProperties: true
 };

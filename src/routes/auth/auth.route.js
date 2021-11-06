@@ -8,6 +8,6 @@ router.post('/login', validator(schema.loginSchema), controller.loginPost);
 router.post('/forgot', validator(schema.forgotSchema), controller.forgotPassword);
 router.post('/recovery', validator(schema.recoverySchema), controller.recoveryPassword);
 router.get('/verify', controller.verifyAccount);
-router.post('/refresh', controller.refreshTokenPost);
+router.post('/refresh', validator(schema.refreshTokenSchema), controller.refreshTokenPost);
 
 module.exports = router;

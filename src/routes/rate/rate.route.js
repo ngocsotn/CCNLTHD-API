@@ -1,14 +1,19 @@
 const router = require('express').Router();
 const controller = require('./rate.controller');
-const { seller, bidder } = require('../../middleware/auth.middleware');
+const schema = require('../../schema/rate.schema');
+const validator = require('../../middleware/validate.middleware');
+const { bidder } = require('../../middleware/auth.middleware');
 
-// xem lịch sử đánh giá người khác
+// public
+// xem lịch sử được đánh giá của người khác
 router.get('/:id', controller.getOtherUserId);
 
-// xem lịch sử đánh giá cá nhân
+// logged user only
+// xem lịch sử được đánh giá bản thân
 router.get('/', bidder(), controller.getSelfRate);
 
+// bidder
 //bidder tạo đánh giá
-router.post('/', bidder(), controller.bidderCreateRate);
+router.post('/', validator(schema.rateSchema), bidder(), controller.bidderCreateRate);
 
 module.exports = router;

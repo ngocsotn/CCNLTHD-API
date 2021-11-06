@@ -49,10 +49,9 @@ exports.recoverySchema = {
 exports.refreshTokenSchema = {
 	type: 'object',
 	properties: {
-		accessToken: { type: 'string', minLength: 1 },
-		refreshToken: { type: 'string', minLength: 1 }
+		refresh_token: { type: 'string', minLength: 5 }
 	},
 
-	required: [ 'accessToken', 'refreshToken' ],
+	required: [ 'refresh_token' ],
 	additionalProperties: false
 };

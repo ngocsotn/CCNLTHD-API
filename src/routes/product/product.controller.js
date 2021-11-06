@@ -1,3 +1,4 @@
+// controller sẽ gọi hàm từ product.complete.js có sẵn
 const http_message = require('../../constants/http_message.constant');
 const product_service = require('../../models/Product/Product.service');
 const product_image_service = require('../../models/ProductImage/ProductImage.service');

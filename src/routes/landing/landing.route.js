@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const controller = require('./landing.controller');
 
+// public
 router.get('/', controller.get);
 router.post('/', controller.post);
 router.delete('/', controller.delete);

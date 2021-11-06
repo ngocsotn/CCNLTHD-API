@@ -6,11 +6,11 @@ const { bidder, admin } = require('../../middleware/auth.middleware');
 
 //bidder
 router.get('/', bidder(), controller.bidderGet);
-router.post('/', validator(schema.bidderCreateRequestSchema), bidder(), controller.bidderPost);
+router.post('/', bidder(), validator(schema.bidderCreateRequestSchema), controller.bidderPost);
 
 //admin
 router.get('/admin/', admin(), controller.adminGetAll);
 router.get('/admin/:id', admin(), controller.adminGet);
-router.put('/admin/', validator(schema.adminPutRequestSchema), admin(), controller.adminPut);
+router.put('/admin/', admin(), validator(schema.adminPutRequestSchema), controller.adminPut);
 
 module.exports = router;
