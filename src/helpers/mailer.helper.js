@@ -60,7 +60,7 @@ module.exports.send = async (subject, to_email, to_name, html) => {
 
 	apiInstance.sendTransacEmail(sendSmtpEmail).then(
 		function(data) {
-			console.log('API called successfully. Returned data: ' + data);
+			//console.log('API called successfully. Returned data: ' + data);
 		},
 		function(error) {
 			console.error(error);

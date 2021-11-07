@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
 const DataTypes = Sequelize.DataTypes;
 const moment = require('moment');
-moment().utcOffset('+07:00');
+// moment().utcOffset('+07:00');
 
 class AuctionHistory extends Model {}
 

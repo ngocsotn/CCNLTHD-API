@@ -88,6 +88,10 @@ exports.status_400_favorite_duplicate = {
 	message: 'Đã tồn tại trong danh sách của bạn rồi!'
 };
 
+exports.status_400_trade_not_found = {
+	message: 'Không tìm thấy hoặc giao dịch này đã đánh giá rồi!'
+};
+
 exports.status401_IP = {
 	message: 'IP không được phép truy cập'
 };

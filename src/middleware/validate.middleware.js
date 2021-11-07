@@ -6,7 +6,7 @@ const reader = require('../helpers/setting_reader.helper');
 module.exports = (schema) => {
 	return (req, res, next) => {
 		const validate = ajv.compile(schema);
-		console.log(req.body);
+		// console.log(req.body);
 		const valid = validate(req.body);
 		if (!valid) {
 			// console.log(validate.errors);

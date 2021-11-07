@@ -1,8 +1,9 @@
 const User = require('./user.model');
 const random_helper = require('../../helpers/random.helper');
 const bcrypt_helper = require('../../helpers/bcrypt.helper');
+const Op = require('sequelize').Op;
 const moment = require('moment');
-moment().utcOffset('+07:00');
+// moment().utcOffset('+07:00');
 
 module.exports.getAllUser = async (exclude_arr = [], page = null, limit = null) => {
 	page = page ? page : 1;

@@ -15,13 +15,13 @@ module.exports.addFieldForProduct = async (product) => {
 
 	// thông tin người bán + điểm
 	const seller = await user_service.findUserById(product.seller_id, [ 'password', 'refresh_token' ]);
-	product.dataValues.seller = handleUserInfoInProduct(seller, 'seller');
+	product.dataValues.seller = await handleUserInfoInProduct(seller, 'seller');
 
 	// thông tin người mua + điểm
 	if (product.bidder_id) {
 		if (product.bidder_id > 0) {
 			const bidder = await user_service.findUserById(product.bidder_id, [ 'password', 'refresh_token' ]);
-			product.dataValues.bidder = handleUserInfoInProduct(bidder, 'bidder');
+			product.dataValues.bidder = await handleUserInfoInProduct(bidder, 'bidder');
 		}
 	} else {
 		product.dataValues.bidder = {};
@@ -51,4 +51,12 @@ module.exports.getAllProductDetailsById = async (product_id) => {
 	} else {
 		return {};
 	}
+};
+
+module.exports.getAllProductDetailsByIdArray = async (product_id_array) => {
+	for (const item of product_id_array) {
+		item.dataValues.product = await this.getAllProductDetailsById(item.product_id);
+	}
+
+	return product_id_array;
 };

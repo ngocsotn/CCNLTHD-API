@@ -3,7 +3,7 @@ const auction_service = require('../../models/auction/auction.service');
 const user_service = require('../../models/user/user.service');
 const http_message = require('../../constants/http_message.constant');
 const moment = require('moment');
-moment().utcOffset('+07:00');
+// moment().utcOffset('+07:00');
 
 module.exports.postBlockUser = async (req, res) => {
 	const { user_id, product_id } = req.body;

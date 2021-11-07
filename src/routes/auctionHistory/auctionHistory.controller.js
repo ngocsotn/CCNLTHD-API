@@ -2,8 +2,8 @@ const auction_history_service = require('../../models/AuctionHistory/auctionHist
 
 module.exports.getSelfHistory = async (req, res) => {
 	const token = req.token;
-	const { page, limit, status, order_type, order_by } = req.query;
-	const rs = await auction_history_service.findByUserId(token.id, page, limit, status, order_type, order_by, []);
+	const { page, limit, status, order_type } = req.query;
+	const rs = await auction_history_service.findByUserId(token.id, page, limit, status, order_type, 'last_bid_at', []);
 
-  return res.json(rs);
+	return res.json(rs);
 };

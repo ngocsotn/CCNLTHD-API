@@ -1,4 +1,5 @@
 const AuctionHistory = require('./auctionHistory.model');
+const Op = require('sequelize').Op;
 
 // SELECT
 module.exports.findByUserId = async (
@@ -6,8 +7,8 @@ module.exports.findByUserId = async (
 	page = 1,
 	limit = 1,
 	status = null,
-	order_type = 'last_bit_at',
-	order_by = 'DESC',
+	order_type = 'DESC',
+	order_by = 'last_bit_at',
 	exclude_arr = []
 ) => {
 	page = page ? page : 1;

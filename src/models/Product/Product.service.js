@@ -2,7 +2,13 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const Product = require('./product.model');
 const moment = require('moment');
-// moment().utcOffset('+07:00');
+//moment().utcOffset('+07:00');
+
+// console.log(moment().format('DD/MM/YYYY HH:mm:ss'));
+// const test = moment().utcOffset('+07:00').format('DD/MM/YYYY HH:mm:ss');
+// console.log(test);
+// console.log(moment(test, 'DD/MM/YYYY HH:mm:ss').utcOffset('+00:00').format('DD/MM/YYYY HH:mm:ss'));
+// console.log(moment(test, 'DD/MM/YYYY HH:mm:ss').utcOffset('+07:00').format('DD/MM/YYYY HH:mm:ss'));
 
 // SELECT
 module.exports.getProductDetails = async (product_id, exclude_arr = []) => {
@@ -77,7 +83,7 @@ module.exports.createNewProduct = async (body, seller_id) => {
 		step_price,
 		buy_price,
 		expire_at: moment(expire_at, 'DD/MM/YYYY HH:mm:ss'),
-		create_at: moment().utcOffset(420).format('YYYY-MM-DD HH:mm:ss')
+		create_at: moment().utcOffset(60 * 7).format('YYYY-MM-DD HH:mm:ss')
 	}).catch((err) => {
 		console.log(err);
 		return null;

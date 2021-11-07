@@ -1,6 +1,8 @@
 const TradeHistory = require('./tradeHistory.model');
 const moment = require('moment');
-moment().utcOffset('+07:00');
+const Op = require('sequelize').Op;
+
+// moment().utcOffset('+07:00');
 
 // SELECT
 module.exports.findByBidderId = async (
@@ -8,8 +10,8 @@ module.exports.findByBidderId = async (
 	page = 1,
 	limit = 1,
 	status = null,
-	order_type = 'create_at',
-	order_by = 'DESC',
+	order_type = 'DESC',
+	order_by = 'create_at',
 	exclude_arr = []
 ) => {
 	page = page ? page : 1;
@@ -33,8 +35,8 @@ module.exports.findBySellerId = async (
 	page = 1,
 	limit = 1,
 	status = null,
-	order_type = 'create_at',
-	order_by = 'DESC',
+	order_type = 'DESC',
+	order_by = 'create_at',
 	exclude_arr = []
 ) => {
 	page = page ? page : 1;
@@ -62,6 +64,15 @@ module.exports.findByBidderIdAndProductId = async (bidder_id, product_id) => {
 	});
 };
 
+module.exports.findByProductIdAndStatus = async (product_id, status = 'pending') => {
+	return await TradeHistory.findOne({
+		where: {
+			status,
+			product_id
+		}
+	});
+};
+
 // INSERT
 module.exports.createNewTrade = async (bidder_id, seller_id, product_id, status = 'pending') => {
 	const new_data = await TradeHistory.create({
@@ -69,7 +80,7 @@ module.exports.createNewTrade = async (bidder_id, seller_id, product_id, status 
 		seller_id,
 		product_id,
 		status,
-		create_at: moment().format('DD/MM/YYYY')
+		create_at: moment().utcOffset(60 * 7).format('YYYY-MM-DD HH:mm:ss')
 	}).catch((err) => {
 		console.log(err);
 		return null;
@@ -79,5 +90,20 @@ module.exports.createNewTrade = async (bidder_id, seller_id, product_id, status 
 };
 
 // UPDATE
+module.exports.updateStatusIsPending = async (bidder_id, seller_id, product_id, status) => {
+	await TradeHistory.update(
+		{
+			status
+		},
+		{
+			where: {
+				bidder_id,
+				seller_id,
+				product_id,
+				status: 'pending'
+			}
+		}
+	);
+};
 
 // DELETE

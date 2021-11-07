@@ -1,6 +1,7 @@
 const rate = require('./rate.model');
 const moment = require('moment');
-moment().utcOffset('+07:00');
+
+// moment().utcOffset('+07:00');
 
 // SELECT
 // xem ai đó được đánh giá (user_id_1 là người thực hiện rate, user_id_2 là người ĐƯỢC rate)
@@ -46,7 +47,9 @@ module.exports.findAllByUserId1AndProductId = async (user_id_1, product_id) => {
 // };
 
 // INSERT
-module.exports.createNewRate = async (user_id_1, user_id_2, product_id, comment, point) => {
+module.exports.createNewRate = async (user_id_1, user_id_2, product_id, comment = '', point) => {
+	comment = comment ? comment : '';
+
 	const new_data = await rate
 		.create({
 			user_id_1,

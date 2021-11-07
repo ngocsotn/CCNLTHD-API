@@ -5,15 +5,13 @@ const product_combiner = require('../product/product.combiner');
 
 module.exports.getSelfFavorite = async (req, res) => {
 	const token = req.token;
-	const { page, limit, order_by, order_type } = req.query;
+	const { page, limit, order_type } = req.query;
 
-	const list = await favorite_service.findAllByUserId(token.id, page, limit, order_by, order_type, []);
-	const rs = handlePagingResponse(list, page, limit);
+	const list = await favorite_service.findAllByUserId(token.id, page, limit, 'id', order_type, []);
+	let rs = handlePagingResponse(list, page, limit);
 
 	// thêm thông tin sản phẩm chi tiết vào cho từng item...
-	for (const item of rs.data) {
-		item.dataValues.product = await product_combiner.getAllProductDetailsById(item.product_id);
-	}
+	rs = await product_combiner.getAllProductDetailsByIdArray(rs.data);
 
 	return res.json(rs);
 };

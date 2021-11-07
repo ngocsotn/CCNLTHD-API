@@ -2,7 +2,7 @@ const request_service = require('../../models/Request/request.service');
 const http_message = require('../../constants/http_message.constant');
 const { handlePagingResponse } = require('../../helpers/etc.helper');
 const moment = require('moment');
-moment().utcOffset('+07:00');
+// moment().utcOffset('+07:00');
 
 //bidder
 module.exports.bidderGet = async (req, res) => {

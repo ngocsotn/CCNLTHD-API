@@ -1,6 +1,7 @@
 const Auction = require('./auction.model');
 const moment = require('moment');
-moment().utcOffset('+07:00');
+const Op = require('sequelize').Op;
+// moment().utcOffset('+07:00');
 
 // SELECT
 
@@ -51,7 +52,7 @@ module.exports.createNewAuction = async (user_id, product_id, status, price) => 
 		product_id,
 		status,
 		price,
-		bid_at: moment().format('YYYY-MM-DD HH:mm:ss')
+		bid_at: moment().utcOffset(60 * 7).format('YYYY-MM-DD HH:mm:ss')
 	}).catch((err) => {
 		console.log(err);
 		return null;

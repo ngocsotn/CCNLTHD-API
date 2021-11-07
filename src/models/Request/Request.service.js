@@ -1,7 +1,7 @@
 const Request = require('./request.model');
 const Op = require('sequelize').Op;
 const moment = require('moment');
-moment().utcOffset('+07:00');
+// moment().utcOffset('+07:00');
 
 // SELECT
 module.exports.findByUserId = async (user_id, exclude_arr = []) => {
@@ -40,8 +40,8 @@ module.exports.createNewRequest = async (user_id, message) => {
 		user_id,
 		message,
 		status: 'pending',
-		expire_at: moment().add(7, 'days').format('YYYY-MM-DD'),
-		create_at: moment().format('YYYY-MM-DD')
+		expire_at: moment().utcOffset(60 * 7).add(7, 'days').format('YYYY-MM-DD'),
+		create_at: moment().utcOffset(60 * 7).format('YYYY-MM-DD')
 	}).catch((err) => {
 		console.log(err);
 	});
