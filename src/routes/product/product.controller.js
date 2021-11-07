@@ -37,7 +37,7 @@ module.exports.getProductDetails = async (req, res) => {
 
 	const rs = await product_combiner.getAllProductDetailsById(product_id);
 
-	if (rs === {}) {
+	if (!rs.product_id) {
 		return res.status(204).json({});
 	}
 

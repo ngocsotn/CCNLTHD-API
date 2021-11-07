@@ -54,7 +54,7 @@ module.exports.createNewRate = async (user_id_1, user_id_2, product_id, comment,
 			product_id,
 			comment,
 			point,
-			create_at: moment().format('YYYY-MM-DD HH:mm:ss')
+			create_at: moment().format('YYYY-MM-DD')
 		})
 		.catch((err) => {
 			console.log(err);
