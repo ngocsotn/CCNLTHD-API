@@ -4,6 +4,10 @@ const { bidder, seller } = require('../../middleware/auth.middleware');
 const schema = require('../../schema/auction.schema');
 const validator = require('../../middleware/validate.middleware');
 
+// public
+// xem lịch sử đấu giá của 1 sản phẩm
+router.get('/', controller.getBiddingHistory);
+
 // bidder
 // đấu giá
 router.post('/', bidder(), validator(schema.bidSchema), controller.postBidProduct);

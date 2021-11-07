@@ -1,19 +1,32 @@
 const product_service = require('../../models/Product/Product.service');
 const auction_service = require('../../models/auction/auction.service');
 const user_service = require('../../models/user/user.service');
+const { handlePagingResponse, maskUsername } = require('../../helpers/etc.helper');
 const http_message = require('../../constants/http_message.constant');
 const moment = require('moment');
 // moment().utcOffset('+07:00');
 
-module.exports.postBlockUser = async (req, res) => {
-	const { user_id, product_id } = req.body;
-	await auction_service.updateStatus(user_id, product_id, 'denied');
+//public
+// xem lịch sử đấu giá
+module.exports.getBiddingHistory = async (req, res) => {
+	const { product_id, page, limit } = req.query;
+	const list = await auction_service.getAllByProductId(product_id, page, limit, 'bid_at', 'DESC', []);
+	const rs = handlePagingResponse(list, page, limit);
 
-	//thay thế nếu đó là holder cao nhất hiện tại...
+	for (const item of rs.data) {
+		if (item.user_id) {
+			const bidder = await user_service.findUserById(item.user_id, [ 'password', 'refresh_token' ]);
+			item.dataValues.name = maskUsername(bidder.name);
+		}
+	}
 
-	return res.json(http_message.status200);
+	// const test = await auction_service.getSecondPlaceBidder(2, 1);
+	// console.log(test);
+
+	return res.json(rs);
 };
 
+//bidder
 module.exports.postBuyNow = async (req, res) => {
 	const token = req.token;
 	const { product_id } = req.body;
@@ -92,4 +105,26 @@ const checkBidderValid = async (user_id, product_id) => {
 	}
 
 	return null;
+};
+
+//seller
+module.exports.postBlockUser = async (req, res) => {
+	const { user_id, product_id } = req.body;
+	await auction_service.updateStatus(user_id, product_id, 'denied');
+
+	// lấy product kiểm tra xem holder id trùng không
+	const product = await product_service.getProductDetails(product_id, []);
+
+	//thay thế nếu đó là holder cao nhất hiện tại trong product, thay user 2nd || null
+	if (+product.bidder_id === +user_id) {
+		const second_bidder = await auction_service.getSecondPlaceBidder(user_id, product_id);
+
+		if (second_bidder) {
+			await product_service.updateHolderAndHiddenPrice(product_id, second_bidder.user_id, second_bidder.price);
+		} else {
+			await product_service.updateHolderAndHiddenPrice(product_id, null, product.start_price);
+		}
+	}
+
+	return res.json(http_message.status200);
 };

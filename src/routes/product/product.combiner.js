@@ -21,7 +21,7 @@ module.exports.addFieldForProduct = async (product) => {
 	if (product.bidder_id) {
 		if (product.bidder_id > 0) {
 			const bidder = await user_service.findUserById(product.bidder_id, [ 'password', 'refresh_token' ]);
-			product.dataValues.bidder = await handleUserInfoInProduct(bidder, 'bidder');
+			product.dataValues.bidder = handleUserInfoInProduct(bidder, 'bidder');
 		}
 	} else {
 		product.dataValues.bidder = {};

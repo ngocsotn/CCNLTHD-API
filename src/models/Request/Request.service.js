@@ -15,7 +15,7 @@ module.exports.findAll = async (
 	page = 1,
 	limit = 1,
 	order_by = 'create_at',
-	order_type = 'ASC',
+	order_type = 'DESC',
 	status,
 	exclude_arr
 ) => {
