@@ -14,7 +14,8 @@ module.exports.bidderGet = async (req, res) => {
 	}
 
 	// nếu đang chờ + đã quá hạn -> cho tạo rq mới
-	if (rs.status === 'pending' && moment() > moment(rs.expire_at, 'DD/MM/YYYY')) {
+	const now = moment().utcOffset('+07:00');
+	if (rs.status === 'pending' && now > moment(rs.expire_at, 'DD/MM/YYYY')) {
 		return res.status(204).json({});
 	}
 

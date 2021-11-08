@@ -9,6 +9,8 @@ const validator = require('../../middleware/validate.middleware');
 router.get('/', controller.getBiddingHistory);
 
 // bidder
+// xem ds các sản phẩm đã và đang tham gia ít nhất 1 lần
+router.get('/self', bidder(), controller.getSelfAreJoined);
 // đấu giá
 router.post('/', bidder(), validator(schema.bidSchema), controller.postBidProduct);
 // mua ngay

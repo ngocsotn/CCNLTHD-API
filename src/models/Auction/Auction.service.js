@@ -1,9 +1,11 @@
 const Auction = require('./auction.model');
+const Sequelize = require('sequelize');
 const moment = require('moment');
 const Op = require('sequelize').Op;
 // moment().utcOffset('+07:00');
 
 // SELECT
+// lấy toàn bộ lượt bid dựa vào product ID
 module.exports.getAllByProductId = async (
 	product_id = 0,
 	page = 1,
@@ -26,6 +28,37 @@ module.exports.getAllByProductId = async (
 	});
 };
 
+// lấy toàn bộ product dựa vào user_id để hiển thị danh sách đã tham gia, distinct
+module.exports.getAllDistinctByUserId = async (
+	user_id = 0,
+	page = 1,
+	limit = 10,
+	order_by = 'bid_at',
+	order_type = 'DESC',
+	exclude_arr = []
+) => {
+	page = page ? page : 1;
+	limit = limit ? limit : 999999999;
+	const rs = { count: 0, rows: [] };
+	const list = await Auction.findAll({
+		where: { user_id },
+		attributes: [ [ Sequelize.fn('DISTINCT', Sequelize.col('product_id')), 'product_id' ] ],
+		order: [ [ order_by, order_type ] ],
+		offset: (+page - 1) * +limit,
+		limit: +limit
+	});
+
+	for (const item of list) {
+		const new_item = await this.getManyByUserIdAndProductId(user_id, item.product_id, [], 'bid_at', 'DESC');
+		if (new_item.count > 0) {
+			rs.count += 1;
+			rs.rows.push(new_item.rows[0]);
+		}
+	}
+
+	return rs;
+};
+
 // nếu status = denied => ko được bid
 module.exports.getUserByIdAndStatus = async (user_id, status = 'accepted') => {
 	const rs = await Auction.findOne({
@@ -35,6 +68,7 @@ module.exports.getUserByIdAndStatus = async (user_id, status = 'accepted') => {
 	return rs;
 };
 
+// đếm số lượng user tham gia 1 product nào đó, có distinct
 module.exports.getCountUserByProductId = async (product_id) => {
 	const rs = await Auction.count({
 		distinct: true,
@@ -45,6 +79,7 @@ module.exports.getCountUserByProductId = async (product_id) => {
 	return rs;
 };
 
+// để xem số lần user X bid sản phẩm Y
 module.exports.getManyByUserIdAndProductId = async (
 	user_id,
 	product_id,
@@ -63,7 +98,7 @@ module.exports.getManyByUserIdAndProductId = async (
 	return rs;
 };
 
-// tìm người giữ giá thứ 2 khác người đang top (bị block)
+// tìm người giữ giá thứ 2 khác người đang top (bị block), ko có trả ra null
 module.exports.getSecondPlaceBidder = async (top_bidder, product_id) => {
 	const blocked_arr_id = [ top_bidder ];
 	const blocked_user = await this.findAllUserIdBeingBlock();
@@ -112,7 +147,6 @@ module.exports.createNewAuction = async (user_id, product_id, status, price) => 
 };
 
 // UPDATE
-
 //update để chặn user bid tiếp cái sản phẩm X
 module.exports.updateStatus = async (user_id, product_id, status = 'accepted') => {
 	//chỉ update cái bid gần nhất

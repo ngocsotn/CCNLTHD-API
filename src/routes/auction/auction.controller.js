@@ -7,7 +7,7 @@ const moment = require('moment');
 // moment().utcOffset('+07:00');
 
 //public
-// xem lịch sử đấu giá
+// xem lịch sử ra giá của 1 sản phẩm nào đó
 module.exports.getBiddingHistory = async (req, res) => {
 	const { product_id, page, limit } = req.query;
 	const list = await auction_service.getAllByProductId(product_id, page, limit, 'bid_at', 'DESC', []);
@@ -27,6 +27,18 @@ module.exports.getBiddingHistory = async (req, res) => {
 };
 
 //bidder
+// xem danh sách sản phẩm đã, đang tham gia
+module.exports.getSelfAreJoined = async (req, res) => {
+	const token = req.token;
+	const { page, limit } = req.query;
+
+	const list = await auction_service.getAllDistinctByUserId(token.id, page, limit, 'bid_at', 'DESC', []);
+	const rs = handlePagingResponse(list, page, limit);
+
+	return res.json(rs);
+};
+
+//mua ngay
 module.exports.postBuyNow = async (req, res) => {
 	const token = req.token;
 	const { product_id } = req.body;
@@ -44,6 +56,7 @@ module.exports.postBuyNow = async (req, res) => {
 	return res.json(http_message.status200);
 };
 
+// bid sản phẩm
 module.exports.postBidProduct = async (req, res) => {
 	const token = req.token;
 	const { price, product_id } = req.body;
@@ -99,8 +112,9 @@ const checkBidderValid = async (user_id, product_id) => {
 	}
 
 	const product = await product_service.getProductDetails(product_id, []);
+	const now = moment().utcOffset('+07:00');
 
-	if (moment().isAfter(moment(product.expire_at, 'DD/MM/YYYY HH:mm:ss'))) {
+	if (now > moment(product.expire_at, 'DD/MM/YYYY HH:mm:ss')) {
 		return { errs: [ http_message.status_400_bid_time_over.message ] };
 	}
 
