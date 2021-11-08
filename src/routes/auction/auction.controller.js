@@ -9,7 +9,8 @@ const moment = require('moment');
 //public
 // xem lịch sử ra giá của 1 sản phẩm nào đó
 module.exports.getBiddingHistory = async (req, res) => {
-	const { product_id, page, limit } = req.query;
+	const product_id = req.params.id;
+	const { page, limit } = req.query;
 	const list = await auction_service.getAllByProductId(product_id, page, limit, 'bid_at', 'DESC', []);
 	const rs = handlePagingResponse(list, page, limit);
 

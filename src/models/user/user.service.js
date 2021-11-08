@@ -49,7 +49,7 @@ module.exports.createNewUser = async (body, refresh_token, is_admin) => {
 	const new_data = await User.create({
 		email,
 		name,
-		birth: moment(birth, 'DD/MM/YYYY').format('YYYY-MM-DD'), //trong mysql, date sẽ lưu YYYY-MM-DD HH:mm:ss
+		birth: birth ? moment(birth, 'DD/MM/YYYY').format('YYYY-MM-DD') : null, //trong mysql, date sẽ lưu YYYY-MM-DD HH:mm:ss
 		address,
 		code: is_admin ? '' : await this.createNewCode(10),
 		refresh_token,

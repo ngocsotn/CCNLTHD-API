@@ -6,7 +6,7 @@ const validator = require('../../middleware/validate.middleware');
 
 // public
 // xem lịch sử đấu giá của 1 sản phẩm
-router.get('/', controller.getBiddingHistory);
+router.get('/:id', controller.getBiddingHistory);
 
 // bidder
 // xem ds các sản phẩm đã và đang tham gia ít nhất 1 lần

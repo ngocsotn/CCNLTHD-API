@@ -24,6 +24,8 @@ router.use('/rate', require('./src/routes/rate/rate.route'));
 router.use('/history', require('./src/routes/auctionHistory/auctionHistory.route'));
 router.use('/trade', require('./src/routes/tradeHistory/tradeHistory.route'));
 router.use('/bid', require('./src/routes/auction/auction.route'));
+router.use('/recaptcha', require('./src/routes/recaptcha/v2/recaptcha.route'));
+router.use('/home', require('./src/routes/home/home.route'));
 
 // errors
 router.use(errorsHandler.internalError);
