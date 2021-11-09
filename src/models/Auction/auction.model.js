@@ -28,7 +28,7 @@ Auction.init(
 			defaultValue: 'accepted'
 		},
 		price: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.BIGINT,
 			allowNull: false
 		},
 		bid_at: {

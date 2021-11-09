@@ -60,12 +60,12 @@ exports.status_400_step_price_bid = {
 	message: 'Giá tiền bước nhảy không hợp lệ!'
 };
 
-exports.status_400_step_price_bid = {
+exports.status_400_less_price_bid = {
 	message: 'Rất tiếc, giá hiện tại cao hơn rồi!'
 };
 
 exports.status_400_bid_time_over = {
-	message: 'Sản phẩm đã hết thời gian đấu giá!'
+	message: 'Sản phẩm đã hết thời gian đấu giá hoặc đã kết thúc!'
 };
 
 exports.status_400_point_is_low = {

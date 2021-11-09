@@ -68,6 +68,16 @@ Product.init(
 			allowNull: true,
 			defaultValue: 0
 		},
+		join_count: {//số người tham gia đâu giá
+			type: DataTypes.BIGINT,
+			allowNull: true,
+			defaultValue: 0
+		},
+		bid_count: {//số lượt bid
+			type: DataTypes.BIGINT,
+			allowNull: true,
+			defaultValue: 0
+		},
 		delete: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,

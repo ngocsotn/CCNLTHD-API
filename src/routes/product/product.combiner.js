@@ -11,7 +11,7 @@ module.exports.addFieldForProduct = async (product) => {
 	}
 
 	// thêm số người đang tham gia hiện tại
-	product.dataValues.join_count = await auction_service.getCountUserByProductId(product.product_id);
+	// product.dataValues.join_count = await auction_service.getCountUserByProductId(product.product_id);
 
 	// thông tin người bán + điểm
 	const seller = await user_service.findUserById(product.seller_id, [ 'password', 'refresh_token' ]);

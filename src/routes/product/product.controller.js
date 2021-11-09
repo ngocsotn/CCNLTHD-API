@@ -19,7 +19,9 @@ module.exports.ultimateSearchProduct = async (req, res) => {
 		order_by,
 		order_type,
 		is_self,
-		token.id
+		token.id,
+    0,
+    null
 	);
 
 	const rs = handlePagingResponse(list, page, limit);

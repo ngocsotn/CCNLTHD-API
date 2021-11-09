@@ -28,7 +28,7 @@ AuctionHistory.init(
 			defaultValue: 'lose'
 		},
 		price: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.BIGINT,
 			allowNull: false
 		},
 		last_bid_at: {

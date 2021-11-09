@@ -49,6 +49,9 @@ module.exports.postBuyNow = async (req, res) => {
 		return res.status(400).json(is_valid_bidder);
 	}
 
+	// đếm lại số ng tham gia bid
+	const join_count = await auction_service.getCountUserByProductId(product_id);
+	await product_service.updateJoinCount(product_id, +join_count);
 	await product_service.updateBuyNow(product_id, token.id);
 	await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
 	//tạo giao dịch và lịch sử đấu giá
@@ -67,8 +70,9 @@ module.exports.postBidProduct = async (req, res) => {
 	if (is_valid_bidder) {
 		return res.status(400).json(is_valid_bidder);
 	}
+	console.log('giá giá');
 
-	if (price % product.step_price !== 0) {
+	if (+price % product.step_price !== 0) {
 		return res.status(400).json({ errs: [ http_message.status_400_step_price_bid.message ] });
 	}
 
@@ -76,7 +80,18 @@ module.exports.postBidProduct = async (req, res) => {
 	if (price >= product.buy_price && product.buy_price > 1000) {
 		await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
 		await product_service.updateShowPrice(product_id, price);
-		// ...
+		await product_service.updateProductStatus(product_id, 'off');
+
+		// đếm lại số ng tham gia bid
+		const join_count = await auction_service.getCountUserByProductId(product_id);
+		await product_service.updateJoinCount(product_id, +join_count);
+
+		// update tăng số lượt bid
+		await product_service.updateIncreaseBidCount(product_id);
+
+		// gửi socket
+
+		return res.json({ errs: [ 'Bạn đã chiến thắng!' ] });
 	}
 
 	if (price <= product.hidden_price) {
@@ -84,15 +99,29 @@ module.exports.postBidProduct = async (req, res) => {
 			await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
 			await product_service.updateShowPrice(product_id, price);
 
+			// đếm lại số ng tham gia bid
+			const join_count = await auction_service.getCountUserByProductId(product_id);
+			await product_service.updateJoinCount(product_id, +join_count);
+
+			// update tăng số lượt bid
+			await product_service.updateIncreaseBidCount(product_id);
+
 			//Gửi socket...
 		}
 
-		return res.status(400).json({ errs: [ http_message.status_400_step_price_bid.message ] });
+		return res.status(400).json({ errs: [ http_message.status_400_less_price_bid.message ] });
 	}
 
 	//nếu pass hết check
 	await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
 	await product_service.updateHolderAndHiddenPrice(product_id, token.id, price);
+
+	// đếm lại số ng tham gia bid
+	const join_count = await auction_service.getCountUserByProductId(product_id);
+	await product_service.updateJoinCount(product_id, +join_count);
+
+	// update tăng số lượt bid
+	await product_service.updateIncreaseBidCount(product_id);
 
 	//Gửi socket...
 
@@ -114,6 +143,10 @@ const checkBidderValid = async (user_id, product_id) => {
 
 	const product = await product_service.getProductDetails(product_id, []);
 	const now = moment().utcOffset('+07:00');
+
+	if (product.status !== 'on') {
+		return { errs: [ http_message.status_400_bid_time_over.message ] };
+	}
 
 	if (now > moment(product.expire_at, 'DD/MM/YYYY HH:mm:ss')) {
 		return { errs: [ http_message.status_400_bid_time_over.message ] };

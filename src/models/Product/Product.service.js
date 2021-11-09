@@ -28,21 +28,31 @@ module.exports.getUltimate = async (
 	order_by = 'create_at',
 	order_type = 'DESC',
 	is_self = 0,
-	seller_id = null
+	seller_id = null,
+	is_expire = 0,
+	status = 'on'
 ) => {
 	page = page > 0 ? page : 1;
 	sub_category_id = sub_category_id ? sub_category_id : { [Op.ne]: null };
 	seller_id = +is_self === 1 ? seller_id : { [Op.ne]: null };
 	seller_id = seller_id ? seller_id : { [Op.ne]: null };
 	keyword = keyword ? keyword.split(' ').join(',') : '';
+	status = status ? status : { [Op.ne]: null };
+
 	exclude_arr.push('delete');
+
+	const now = +is_expire === 0 ? moment().utcOffset(60 * 7) : moment('01/01/2021 00:00:00', 'DD/MM/YYYY HH:mm:ss');
 
 	const rs = await Product.findAndCountAll({
 		where: [
 			{
 				seller_id,
 				sub_category_id,
-				delete: false
+				delete: false,
+        status,
+				expire_at: {
+					[Op.gt]: now //greater than
+				}
 			},
 			keyword && Sequelize.literal('MATCH (name) AGAINST (:keyword IN NATURAL LANGUAGE MODE)')
 		],
@@ -159,6 +169,31 @@ module.exports.updateBuyNow = async (product_id, user_id) => {
 	);
 };
 
+module.exports.updateJoinCount = async (product_id, new_count = 0) => {
+	await Product.update(
+		{
+			join_count: new_count
+		},
+		{
+			where: { product_id }
+		}
+	);
+};
+
+module.exports.updateIncreaseBidCount = async (product_id) => {
+	const rs = await this.getProductDetails(product_id, []);
+
+	if (rs.product_id) {
+		await Product.update(
+			{
+				bid_count: rs.bid_count + 1
+			},
+			{
+				where: { product_id }
+			}
+		);
+	}
+};
 // DELETE (fake delete)
 module.exports.deleteProductFake = async (product_id) => {
 	await Product.update(
