@@ -5,6 +5,7 @@ const product_combiner = require('./product.combiner');
 const jwt_helper = require('../../helpers/jwt.helper');
 const { handlePagingResponse } = require('../../helpers/etc.helper');
 
+// public
 module.exports.ultimateSearchProduct = async (req, res) => {
 	const token = jwt_helper.getPayloadFromHeaderToken(req) || { id: null };
 
@@ -46,18 +47,19 @@ module.exports.getProductDetails = async (req, res) => {
 	return res.json(rs);
 };
 
+// seller
 module.exports.createProductPost = async (req, res) => {
 	const token = req.token;
 	const errs = [];
 	const { start_price, step_price, buy_price } = req.body;
 
-	if (start_price < 1000 || step_price < 1000 || (buy_price && buy_price < 1000)) {
+	if (+start_price < 1000 || +step_price < 1000 || (buy_price && +buy_price < 1000)) {
 		errs.push(http_message.status400_price.message);
 	}
-	if (buy_price && start_price >= buy_price) {
+	if (buy_price && +start_price >= +buy_price) {
 		errs.push(http_message.status400_buy_price.message);
 	}
-	if (step_price >= start_price) {
+	if (+step_price >= +start_price) {
 		errs.push(http_message.status400_step_price.message);
 	}
 
@@ -79,6 +81,8 @@ module.exports.appendProductDetail = async (req, res) => {
 	return res.json(rs);
 };
 
+
+// admin
 module.exports.deleteProduct = async (req, res) => {
 	const product_id = req.params.id;
 	await product_service.deleteProductFake(product_id);

@@ -6,7 +6,8 @@ const controller = require('./images.controller');
 const multer = require('./multer');
 
 // seller
-router.post('/', multer.array('image'), seller(), validator(schema.createManyImages), controller.uploadImages);
+//, validator(schema.createManyImages)
+router.post('/', multer.array('image'), seller(), controller.uploadImages);
 router.delete('/:id', seller(), controller.deleteImage);
 router.post('/delete-many', seller(), validator(schema.deleteMany), controller.deleteManyImages);
 

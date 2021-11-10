@@ -16,6 +16,13 @@ module.exports.uploadImages = async (req, res) => {
 	const urls = [];
 	const files = req.files;
 
+	if (!files) {
+		return res.status(400).json({ errs: 'Phải có ít nhất 1 ảnh' });
+	}
+	if (!product_id) {
+		return res.status(400).json({ errs: 'Phải có product_id' });
+	}
+
 	//up ảnh lên cloud
 	for (const file of files) {
 		const { path } = file;
@@ -26,7 +33,7 @@ module.exports.uploadImages = async (req, res) => {
 
 	//cập nhật url vào db
 	for (const item of urls) {
-		await product_image_service.createNewProductImage(product_id, item.id, this.makeFullCloudId(item.id), item.url);
+		await product_image_service.createNewProductImage(+product_id, item.id, this.makeFullCloudId(item.id), item.url);
 	}
 
 	res.status(200).json({
