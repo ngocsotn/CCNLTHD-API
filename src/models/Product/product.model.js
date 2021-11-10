@@ -66,7 +66,7 @@ Product.init(
 		buy_price: {
 			type: DataTypes.BIGINT,
 			allowNull: true,
-			defaultValue: 0
+			defaultValue: null
 		},
 		join_count: {//số người tham gia đâu giá
 			type: DataTypes.BIGINT,

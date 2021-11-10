@@ -28,11 +28,11 @@ module.exports.verifyAccessToken = (token) => {
 };
 
 module.exports.getPayloadFromHeaderToken = (req) => {
-  const token = this.getAccessTokenFromHeader(req);
-  if(token) {
-    return this.verifyAccessToken(token);
-  }
-  return null;
+	const token = this.getAccessTokenFromHeader(req);
+	if (token) {
+		return this.verifyAccessToken(token);
+	}
+	return null;
 };
 
 module.exports.refreshAccessToken = async (token, refresh_token) => {
@@ -50,7 +50,7 @@ module.exports.refreshAccessToken = async (token, refresh_token) => {
 	}
 
 	if (rs.refresh_token === refresh_token) {
-		return this.generateAccessToken({ id: payload.id });
+		return this.generateAccessToken({ id: payload.id, role: rs.role, active: rs.active });
 	} else {
 		return '2'; //refresh token error
 	}

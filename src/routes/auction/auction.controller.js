@@ -52,6 +52,16 @@ module.exports.postBuyNow = async (req, res) => {
 	// đếm lại số ng tham gia bid
 	const join_count = await auction_service.getCountUserByProductId(product_id);
 	await product_service.updateJoinCount(product_id, +join_count);
+
+	const product = await product_service.getProductDetails(product_id, []);
+	if (!product.buy_price) {
+		return res.status(400).json({ errs: [ 'Sẩn phẩm này không thể mua ngay' ] });
+	}
+
+	if (product.buy_price < 2000) {
+		return res.status(400).json({ errs: [ 'Sẩn phẩm này không thể mua ngay' ] });
+	}
+
 	await product_service.updateBuyNow(product_id, token.id);
 	await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
 	//tạo giao dịch và lịch sử đấu giá
@@ -76,22 +86,25 @@ module.exports.postBidProduct = async (req, res) => {
 		return res.status(400).json({ errs: [ http_message.status_400_step_price_bid.message ] });
 	}
 
+  //nếu có giá mua ngay
 	//nếu giá hiện tại >= giá mua ngay thì xong đấu giá
-	if (price >= product.buy_price && product.buy_price > 1000) {
-		await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
-		await product_service.updateShowPrice(product_id, price);
-		await product_service.updateProductStatus(product_id, 'off');
+	if (product.buy_price) {
+		if (price >= product.buy_price && product.buy_price > 1000) {
+			await auction_service.createNewAuction(token.id, product_id, 'accepted', price);
+			await product_service.updateShowPrice(product_id, price);
+			await product_service.updateProductStatus(product_id, 'off');
 
-		// đếm lại số ng tham gia bid
-		const join_count = await auction_service.getCountUserByProductId(product_id);
-		await product_service.updateJoinCount(product_id, +join_count);
+			// đếm lại số ng tham gia bid
+			const join_count = await auction_service.getCountUserByProductId(product_id);
+			await product_service.updateJoinCount(product_id, +join_count);
 
-		// update tăng số lượt bid
-		await product_service.updateIncreaseBidCount(product_id);
+			// update tăng số lượt bid
+			await product_service.updateIncreaseBidCount(product_id);
 
-		// gửi socket
+			// gửi socket
 
-		return res.json({ errs: [ 'Bạn đã chiến thắng!' ] });
+			return res.json({ errs: [ 'Bạn đã chiến thắng!' ] });
+		}
 	}
 
 	if (price <= product.hidden_price) {

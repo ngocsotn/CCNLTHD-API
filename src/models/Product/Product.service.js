@@ -49,7 +49,7 @@ module.exports.getUltimate = async (
 				seller_id,
 				sub_category_id,
 				delete: false,
-        status,
+				status,
 				expire_at: {
 					[Op.gt]: now //greater than
 				}
@@ -91,7 +91,7 @@ module.exports.createNewProduct = async (body, seller_id) => {
 		hidden_price: start_price,
 		start_price,
 		step_price,
-		buy_price,
+		buy_price: buy_price ? buy_price : null,
 		expire_at: moment(expire_at, 'DD/MM/YYYY HH:mm:ss'),
 		create_at: moment().utcOffset(60 * 7).format('YYYY-MM-DD HH:mm:ss')
 	}).catch((err) => {

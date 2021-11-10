@@ -20,7 +20,6 @@ exports.createProductSchema = {
 		'detail',
 		'start_price',
 		'step_price',
-		'buy_price',
 		'expire_at'
 	],
 	additionalProperties: true
