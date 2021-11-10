@@ -7,12 +7,14 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const routes = require('./routes');
 const db = require('./src/utils/db');
 require('express-async-errors');
 
+app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());

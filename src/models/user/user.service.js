@@ -156,6 +156,19 @@ module.exports.updateAddress = async (id, address) => {
 	);
 };
 
+module.exports.updateRole = async (id, role) => {
+	await User.update(
+		{
+			role
+		},
+		{
+			where: {
+				id
+			}
+		}
+	);
+};
+
 module.exports.updateEmail = async (id, email) => {
 	const rs = await this.findUserById(id, []);
 	const rs_2 = await this.findUserByEmail(email, []);
