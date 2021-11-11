@@ -17,6 +17,8 @@ module.exports.findByBidderId = async (
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
 	status = status ? status : { [Op.ne]: null };
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "create_at";
 
 	return await TradeHistory.findAndCountAll({
 		where: {
@@ -42,6 +44,8 @@ module.exports.findBySellerId = async (
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
 	status = status ? status : { [Op.ne]: null };
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "create_at";
 
 	return await TradeHistory.findAndCountAll({
 		where: {

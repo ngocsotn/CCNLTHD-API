@@ -16,6 +16,8 @@ module.exports.getAllByProductId = async (
 ) => {
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "bid_at";
 
 	return await Auction.findAndCountAll({
 		where: {
@@ -39,6 +41,9 @@ module.exports.getAllDistinctByUserId = async (
 ) => {
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "bid_at";
+
 	const rs = { count: 0, rows: [] };
 	const list = await Auction.findAll({
 		where: { user_id },
@@ -87,6 +92,9 @@ module.exports.getManyByUserIdAndProductId = async (
 	order_by = 'bid_at',
 	order_type = 'DESC'
 ) => {
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "bid_at";
+
 	const rs = await Auction.findAndCountAll({
 		where: { user_id, product_id },
 		attributes: {

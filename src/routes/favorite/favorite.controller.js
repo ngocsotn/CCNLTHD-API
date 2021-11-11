@@ -32,10 +32,11 @@ module.exports.getSelfFavorite = async (req, res) => {
     order_type,
     []
   );
-  let rs = handlePagingResponse(list, page, limit);
+
+  const rs = handlePagingResponse(list, +page, +limit);
 
   // thêm thông tin sản phẩm chi tiết vào cho từng item...
-  rs = await product_combiner.getAllProductDetailsByIdArray(rs.data);
+  await product_combiner.getAllProductDetailsByIdArray(rs.data);
 
   return res.json(rs);
 };

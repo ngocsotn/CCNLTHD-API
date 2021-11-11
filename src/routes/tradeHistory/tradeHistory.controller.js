@@ -11,8 +11,8 @@ module.exports.bidderGetTrade = async (req, res) => {
 	const { page, limit, status, order_type } = req.query;
 
 	const list = await trade_history_service.findByBidderId(token.id, page, limit, status, order_type, 'create_at', []);
-	let rs = handlePagingResponse(list, page, limit);
-	rs = await product_combiner.getAllProductDetailsByIdArray(rs.data);
+	const rs = handlePagingResponse(list, page, limit);
+	await product_combiner.getAllProductDetailsByIdArray(rs.data);
 
 	return res.json(rs);
 };
@@ -23,8 +23,8 @@ module.exports.sellerGetTrade = async (req, res) => {
 	const { page, limit, status, order_type } = req.query;
 
 	const list = await trade_history_service.findBySellerId(token.id, page, limit, status, order_type, 'create_at', []);
-	let rs = handlePagingResponse(list, page, limit);
-	rs = await product_combiner.getAllProductDetailsByIdArray(rs.data);
+	const rs = handlePagingResponse(list, page, limit);
+	await product_combiner.getAllProductDetailsByIdArray(rs.data);
 
 	return res.json(rs);
 };

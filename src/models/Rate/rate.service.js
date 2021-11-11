@@ -15,6 +15,8 @@ module.exports.findAllByUserId2 = async (
 ) => {
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "create_At";
 
 	return await rate.findAndCountAll({
 		where: { user_id_2 },

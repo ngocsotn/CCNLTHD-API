@@ -1,53 +1,55 @@
-const Favorite = require('./favorite.model');
+const Favorite = require("./favorite.model");
 
 // SELECT
 module.exports.findAllByUserId = async (
-	user_id,
-	page = 1,
-	limit = 9999999,
-	order_by = 'id',
-	order_type = 'DESC',
-	exclude_arr = []
+  user_id,
+  page = 1,
+  limit = 9999999,
+  order_by = "id",
+  order_type = "DESC",
+  exclude_arr = []
 ) => {
-	page = page ? page : 1;
-	limit = limit ? limit : 999999999;
+  page = page ? page : 1;
+  limit = limit ? limit : 999999999;
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "id";
 
-	return await Favorite.findAndCountAll({
-		where: { user_id },
-		attributes: { exclude: exclude_arr },
-		offset: (+page - 1) * +limit,
-		limit: +limit,
-		order: [ [ order_by, order_type ] ]
-	});
+  return await Favorite.findAndCountAll({
+    where: { user_id },
+    attributes: { exclude: exclude_arr },
+    offset: (+page - 1) * +limit,
+    limit: +limit,
+    order: [[order_by, order_type]],
+  });
 };
 
 module.exports.findByUserIdAndProductId = async (user_id, product_id) => {
-	return await Favorite.findOne({
-		where: {
-			user_id,
-			product_id
-		}
-	});
+  return await Favorite.findOne({
+    where: {
+      user_id,
+      product_id,
+    },
+  });
 };
 
 // INSERT
 module.exports.createNewFavorite = async (user_id, product_id) => {
-	const new_data = await Favorite.create({
-		user_id,
-		product_id
-	}).catch((err) => {
-		console.log(err);
-		return null;
-	});
+  const new_data = await Favorite.create({
+    user_id,
+    product_id,
+  }).catch((err) => {
+    console.log(err);
+    return null;
+  });
 
-	return new_data;
+  return new_data;
 };
 
 // DELETE
 module.exports.deleteFavorite = async (user_id, product_id) => {
-	await Favorite.destroy({
-		where: { user_id, product_id }
-	}).catch((err) => {
-		console.log(err);
-	});
+  await Favorite.destroy({
+    where: { user_id, product_id },
+  }).catch((err) => {
+    console.log(err);
+  });
 };

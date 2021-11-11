@@ -8,12 +8,14 @@ module.exports.findByUserId = async (
 	limit = 1,
 	status = null,
 	order_type = 'DESC',
-	order_by = 'last_bit_at',
+	order_by = 'last_bid_at',
 	exclude_arr = []
 ) => {
 	page = page ? page : 1;
 	limit = limit ? limit : 999999999;
 	status = status ? status : { [Op.ne]: null };
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "last_bid_at";
 
 	return await AuctionHistory.findAndCountAll({
 		where: {
