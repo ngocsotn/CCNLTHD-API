@@ -6,6 +6,7 @@ const validator = require('../../middleware/validate.middleware');
 
 // must logged in
 router.get('/', bidder(), controller.getSelfFavorite);
+router.get('/:id', bidder(), controller.getFavoriteDetail);
 router.post('/', bidder(), validator(schema.createFavoriteSchema), controller.createFavorite);
 router.delete('/:id', bidder(), controller.deleteFavorite);
 
