@@ -16,7 +16,7 @@ const addFullTextToProduct = () => {
 const initProductAliveList = () => {
   setTimeout(() => {
     product_scheduler.init();
-  }, 8000);
+  }, 9000);
 };
 
 module.exports.init = () => {

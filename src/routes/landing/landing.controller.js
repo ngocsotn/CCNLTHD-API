@@ -1,23 +1,23 @@
 module.exports.get = (req, res) => {
-	return res.status(200).json({
-		message: 'You are in the Landing route, method: GET'
-	});
+  return res.status(200).json({
+    message: "You are in the Landing route, method: GET",
+  });
 };
 
 module.exports.post = (req, res) => {
-	return res.status(200).json({
-		message: 'You are in the Landing route, method: POST'
-	});
+  return res.status(200).json({
+    message: "You are in the Landing route, method: POST",
+  });
 };
 
 module.exports.delete = (req, res) => {
-	return res.status(200).json({
-		message: 'You are in the Landing route, method: DELETE'
-	});
+  return res.status(200).json({
+    message: "You are in the Landing route, method: DELETE",
+  });
 };
 
 module.exports.put = (req, res) => {
-	return res.status(200).json({
-		message: 'You are in the Landing route, method: PUT'
-	});
+  return res.status(200).json({
+    message: "You are in the Landing route, method: PUT",
+  });
 };

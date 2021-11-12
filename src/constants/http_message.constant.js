@@ -20,8 +20,12 @@ exports.status400_price = {
 	message: 'Giá tiền phải là số dương, ít nhất 1000'
 };
 
+exports.status400_price_divine_step = {
+	message: 'Giá tiền phải chia hết cho bước giá'
+};
+
 exports.status400_buy_price = {
-	message: 'Giá mua ngay phải lớn hơn giá khởi điếm ít nhất 1 step'
+	message: 'Giá mua ngay phải lớn hơn giá khởi điếm ít nhất 1 bước'
 };
 
 exports.status400_step_price = {

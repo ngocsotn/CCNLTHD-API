@@ -69,11 +69,17 @@ module.exports.createProductPost = async (req, res) => {
   ) {
     errs.push(http_message.status400_price.message);
   }
-  if (buy_price && +start_price >= +buy_price) {
+
+  if (buy_price && +start_price + +step_price >= +buy_price) {
     errs.push(http_message.status400_buy_price.message);
   }
+
   if (+step_price >= +start_price) {
     errs.push(http_message.status400_step_price.message);
+  }
+
+  if (+start_price % +step_price !== 0) {
+    errs.push(http_message.status400_price_divine_step.message);
   }
 
   if (errs.length > 0) {
@@ -89,8 +95,8 @@ module.exports.appendProductDetail = async (req, res) => {
   const { detail, product_id } = req.body;
   await product_service.updateAppendDetail(detail, product_id, token.id);
   const rs = await product_service.getProductDetails(product_id, []);
-  
-  //gửi socket...
+
+  //gửi socket khi seller update thêm đuôi chi tiết sản phẩm
   io.boardCast(product_id);
 
   return res.json(rs);
@@ -101,7 +107,7 @@ module.exports.deleteProduct = async (req, res) => {
   const product_id = req.params.id;
   await product_service.deleteProductFake(product_id);
 
-  //gửi socket...
+  //gửi socket khi admin gỡ sản phẩm
   io.boardCast(product_id);
 
   return res.json(http_message.status200);

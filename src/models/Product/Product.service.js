@@ -11,6 +11,19 @@ const moment = require("moment");
 // console.log(moment(test, 'DD/MM/YYYY HH:mm:ss').utcOffset('+07:00').format('DD/MM/YYYY HH:mm:ss'));
 
 // SELECT
+module.exports.getForScheduler = async () => {
+  const now = moment().utcOffset(60 * 7);
+  return await Product.findAll({
+    where: {
+      delete: false,
+      status: "on",
+      expire_at: {
+        [Op.gt]: now, //greater than
+      },
+    },
+  });
+};
+
 module.exports.getProductDetails = async (product_id, exclude_arr = []) => {
   exclude_arr.push("delete");
   return await Product.findOne({

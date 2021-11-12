@@ -9,10 +9,10 @@ module.exports.initSocket = (server) => {
     },
   });
   io.on("connection", (socket) => {
-    console.log("\nCLIENT ĐÃ KẾT NỐI \n");
+    // console.log("\nCLIENT ĐÃ KẾT NỐI \n");
 
     socket.on("disconnect", () => {
-      console.log("\nCLIENT DISCONNECTED\n");
+      // console.log("\nCLIENT DISCONNECTED\n");
 
     });
     socket.on("future", (data) => {
