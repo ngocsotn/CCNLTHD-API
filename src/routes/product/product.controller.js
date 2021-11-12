@@ -52,8 +52,6 @@ module.exports.getProductDetails = async (req, res) => {
   if (!rs.product_id) {
     return res.status(204).json({});
   }
-  //gửi socket...
-  io.boardCast(product_id);
 
   return res.json(rs);
 };
@@ -91,7 +89,9 @@ module.exports.appendProductDetail = async (req, res) => {
   const { detail, product_id } = req.body;
   await product_service.updateAppendDetail(detail, product_id, token.id);
   const rs = await product_service.getProductDetails(product_id, []);
+  
   //gửi socket...
+  io.boardCast(product_id);
 
   return res.json(rs);
 };

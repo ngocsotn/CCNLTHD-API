@@ -9,10 +9,10 @@ module.exports.initSocket = (server) => {
     },
   });
   io.on("connection", (socket) => {
-    // console.log("\nCLIENT ĐÃ KẾT NỐI \n");
+    console.log("\nCLIENT ĐÃ KẾT NỐI \n");
 
     socket.on("disconnect", () => {
-      // console.log("\nCLIENT DISCONNECTED\n");
+      console.log("\nCLIENT DISCONNECTED\n");
 
     });
     socket.on("future", (data) => {
@@ -27,7 +27,7 @@ module.exports.boardCast = (message) => {
     console.log("\nSOCKET IO NOT INIT YET!\n");
     return false;
   }
-  
+
   io.emit("broadcast-channel", message);
   // console.log("\nĐÃ GỬ SOCKET MSG, product_id:", message);
 

@@ -98,9 +98,9 @@ module.exports.postBuyNow = async (req, res) => {
   );
   //tạo giao dịch và lịch sử đấu giá
 
-  //send socket...
+  //send socket khi mua ngay
   io.boardCast(product_id);
-  
+
   return res.json(http_message.status200);
 };
 
@@ -149,7 +149,7 @@ module.exports.postBidProduct = async (req, res) => {
       // update tăng số lượt bid
       await product_service.updateIncreaseBidCount(product_id);
 
-      // gửi socket
+      // gửi socket nếu giá bid chạm mốc mua ngay
       io.boardCast(product_id);
 
       return res.json({ errs: ["Bạn đã chiến thắng!"] });
@@ -175,7 +175,7 @@ module.exports.postBidProduct = async (req, res) => {
       // update tăng số lượt bid
       await product_service.updateIncreaseBidCount(product_id);
 
-      // Gửi socket...
+      // Gửi socket khi có người bid = giá người giữ top
       io.boardCast(product_id);
     }
 
@@ -200,7 +200,7 @@ module.exports.postBidProduct = async (req, res) => {
   // update tăng số lượt bid
   await product_service.updateIncreaseBidCount(product_id);
 
-  //Gửi socket...
+  //Gửi socket khi bid thành công
   io.boardCast(product_id);
 
   return res.json(http_message.status200);
@@ -276,7 +276,7 @@ module.exports.postBlockUser = async (req, res) => {
     }
   }
 
-  // gửi socket
+  // gửi socket khi seller block ai đó
   io.boardCast(product_id);
 
   return res.json(http_message.status200);
