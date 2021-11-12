@@ -7,13 +7,13 @@ const product_combiner = require("../product/product.combiner");
 
 module.exports.getSelfRate = async (req, res) => {
   const token = req.token;
-  const { page, limit, order_by, order_type } = req.query;
+  const { page, limit, order_type } = req.query;
 
   const list = await rate_service.findAllByUserId2(
     token.id,
     page,
     limit,
-    order_by,
+    "create_at",
     order_type,
     []
   );
@@ -26,14 +26,14 @@ module.exports.getSelfRate = async (req, res) => {
 };
 
 module.exports.getOtherUserId = async (req, res) => {
-  const { page, limit, order_by, order_type } = req.query;
+  const { page, limit, order_type } = req.query;
   const user_id = req.params.id;
 
   const list = await rate_service.findAllByUserId2(
     user_id,
     page,
     limit,
-    order_by,
+    "create_at",
     order_type,
     []
   );

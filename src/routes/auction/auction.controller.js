@@ -15,6 +15,8 @@ const moment = require("moment");
 module.exports.getBiddingHistory = async (req, res) => {
   const product_id = req.params.id;
   const { page, limit } = req.query;
+  const product = await product_service.getProductDetails(product_id, []);
+
   const list = await auction_service.getAllByProductId(
     product_id,
     page,
@@ -24,6 +26,7 @@ module.exports.getBiddingHistory = async (req, res) => {
     []
   );
   const rs = handlePagingResponse(list, page, limit);
+  rs.bidder_id = product && product.bidder_id ? product.bidder_id : null;
 
   for (const item of rs.data) {
     if (item.user_id) {
@@ -108,7 +111,12 @@ module.exports.postBidProduct = async (req, res) => {
   if (is_valid_bidder) {
     return res.status(400).json(is_valid_bidder);
   }
-  console.log("giá giá");
+
+  if (price < product.hidden_price) {
+    return res
+      .status(400)
+      .json({ errs: [http_message.status_400_less_price_bid.message] });
+  }
 
   if (+price % product.step_price !== 0) {
     return res
