@@ -4,6 +4,7 @@ const product_service = require("../../models/Product/Product.service");
 const product_combiner = require("./product.combiner");
 const jwt_helper = require("../../helpers/jwt.helper");
 const { handlePagingResponse } = require("../../helpers/etc.helper");
+const io = require("../../helpers/socket.helper");
 
 // public
 module.exports.ultimateSearchProduct = async (req, res) => {
@@ -51,6 +52,8 @@ module.exports.getProductDetails = async (req, res) => {
   if (!rs.product_id) {
     return res.status(204).json({});
   }
+  //gửi socket...
+  io.boardCast(product_id);
 
   return res.json(rs);
 };
@@ -97,5 +100,9 @@ module.exports.appendProductDetail = async (req, res) => {
 module.exports.deleteProduct = async (req, res) => {
   const product_id = req.params.id;
   await product_service.deleteProductFake(product_id);
+
+  //gửi socket...
+  io.boardCast(product_id);
+
   return res.json(http_message.status200);
 };

@@ -38,10 +38,12 @@
 		"morgan": "^1.10.0",
 		"multer": "^1.4.3",
 		"mysql2": "^2.3.0",
+		"node-cron": "^3.0.0",
 		"pg": "^8.7.1",
 		"request": "^2.88.2",
 		"sequelize": "^6.8.0",
 		"sib-api-v3-sdk": "^8.2.1",
+		"socket.io": "^4.3.2",
 		"tedious": "^11.4.0"
 	}
 }

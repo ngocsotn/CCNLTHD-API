@@ -7,6 +7,7 @@ const {
   maskUsername,
 } = require("../../helpers/etc.helper");
 const http_message = require("../../constants/http_message.constant");
+const io = require('../../helpers/socket.helper');
 const moment = require("moment");
 // moment().utcOffset('+07:00');
 
@@ -98,6 +99,8 @@ module.exports.postBuyNow = async (req, res) => {
   //tạo giao dịch và lịch sử đấu giá
 
   //send socket...
+  io.boardCast(product_id);
+  
   return res.json(http_message.status200);
 };
 
@@ -147,6 +150,7 @@ module.exports.postBidProduct = async (req, res) => {
       await product_service.updateIncreaseBidCount(product_id);
 
       // gửi socket
+      io.boardCast(product_id);
 
       return res.json({ errs: ["Bạn đã chiến thắng!"] });
     }
@@ -171,7 +175,8 @@ module.exports.postBidProduct = async (req, res) => {
       // update tăng số lượt bid
       await product_service.updateIncreaseBidCount(product_id);
 
-      //Gửi socket...
+      // Gửi socket...
+      io.boardCast(product_id);
     }
 
     return res
@@ -196,6 +201,7 @@ module.exports.postBidProduct = async (req, res) => {
   await product_service.updateIncreaseBidCount(product_id);
 
   //Gửi socket...
+  io.boardCast(product_id);
 
   return res.json(http_message.status200);
 };
@@ -236,6 +242,13 @@ const checkBidderValid = async (user_id, product_id) => {
 //seller
 module.exports.postBlockUser = async (req, res) => {
   const { user_id, product_id } = req.body;
+  const check = await auction_service.getUserByIdAndStatus(user_id, "denied");
+  if (check) {
+    return res
+      .status(400)
+      .json({ errs: ["Bạn đã từ chối người này với sản phầm hiện tại rồi"] });
+  }
+
   await auction_service.updateStatus(user_id, product_id, "denied");
 
   // lấy product kiểm tra xem holder id trùng không
@@ -262,6 +275,9 @@ module.exports.postBlockUser = async (req, res) => {
       );
     }
   }
+
+  // gửi socket
+  io.boardCast(product_id);
 
   return res.json(http_message.status200);
 };
