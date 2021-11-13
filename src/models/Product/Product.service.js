@@ -244,6 +244,22 @@ module.exports.updateIncreaseBidCount = async (product_id) => {
     );
   }
 };
+
+// dành cho tự gia hạn
+module.exports.updateExpireAt = async (
+  product_id,
+  expire_at = "01/01/1991 18:18:18"
+) => {
+  await Product.update(
+    {
+      expire_at: moment(expire_at, "DD/MM/YYYY HH:mm:ss"),
+    },
+    {
+      where: { product_id },
+    }
+  );
+};
+
 // DELETE (fake delete)
 module.exports.deleteProductFake = async (product_id) => {
   await Product.update(

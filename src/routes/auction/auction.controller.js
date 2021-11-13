@@ -2,12 +2,13 @@ const product_service = require("../../models/Product/Product.service");
 const product_combiner = require("../product/product.combiner");
 const auction_service = require("../../models/auction/auction.service");
 const user_service = require("../../models/user/user.service");
+const product_scheduler = require("../product/product.scheduler");
 const {
   handlePagingResponse,
   maskUsername,
 } = require("../../helpers/etc.helper");
 const http_message = require("../../constants/http_message.constant");
-const io = require('../../helpers/socket.helper');
+const io = require("../../helpers/socket.helper");
 const moment = require("moment");
 // moment().utcOffset('+07:00');
 
@@ -70,8 +71,17 @@ module.exports.getSelfAreJoined = async (req, res) => {
 module.exports.postBuyNow = async (req, res) => {
   const token = req.token;
   const { product_id } = req.body;
+  const product = await product_service.getProductDetails(product_id, []);
+  const bidder = await user_service.findUserById(token.id);
+  const old_bidder =
+    (await user_service.findUserById(product.bidder_id)) || null;
+  const price = product.buy_price || null;
 
-  const is_valid_bidder = await checkBidderValid(token.id, product_id);
+  if (!price) {
+    return res.status(400).json({ errs: ["Sẩn phẩm này không thể mua ngay"] });
+  }
+
+  const is_valid_bidder = await validationBid(bidder, product, price);
   if (is_valid_bidder) {
     return res.status(400).json(is_valid_bidder);
   }
@@ -80,23 +90,16 @@ module.exports.postBuyNow = async (req, res) => {
   const join_count = await auction_service.getCountUserByProductId(product_id);
   await product_service.updateJoinCount(product_id, +join_count);
 
-  const product = await product_service.getProductDetails(product_id, []);
-  if (!product.buy_price) {
-    return res.status(400).json({ errs: ["Sẩn phẩm này không thể mua ngay"] });
-  }
+  // tạo lịch sử tham gia bid
+  // update số người tham gia sản phẩm, tổng số lượt bid
+  // gửi mail holder trước nếu có
+  await stepAfterValidate(token, price, product_id, product, old_bidder);
 
-  if (product.buy_price < 2000) {
-    return res.status(400).json({ errs: ["Sẩn phẩm này không thể mua ngay"] });
-  }
+  // dừng chạy scheduler job dừng lúc expire, vì sẽ dừng ngay lúc này
+  await product_scheduler.deleteProductFromAliveArray(product_id);
 
-  await product_service.updateBuyNow(product_id, token.id);
-  await auction_service.createNewAuction(
-    token.id,
-    product_id,
-    "accepted",
-    price
-  );
-  //tạo giao dịch và lịch sử đấu giá
+  // chạy các task khi sản phẩm kết thúc + gửi mail cho seller, holder
+  await product_scheduler.whenProductEnd(product_id);
 
   //send socket khi mua ngay
   io.boardCast(product_id);
@@ -108,97 +111,64 @@ module.exports.postBuyNow = async (req, res) => {
 module.exports.postBidProduct = async (req, res) => {
   const token = req.token;
   const { price, product_id } = req.body;
-  const is_valid_bidder = await checkBidderValid(token.id, product_id);
+
   const product = await product_service.getProductDetails(product_id, []);
+  const seller = await user_service.findUserById(product.seller_id, []);
+  const bidder = await user_service.findUserById(token.id, []);
+  const old_bidder =
+    (await user_service.findUserById(product.bidder_id)) || null;
+  const is_valid_bidder = await validationBid(bidder, product, price);
 
   if (is_valid_bidder) {
     return res.status(400).json(is_valid_bidder);
   }
 
-  if (price < product.hidden_price) {
-    return res
-      .status(400)
-      .json({ errs: [http_message.status_400_less_price_bid.message] });
-  }
+  // nếu pass hết KIỂM TRA
 
-  if (+price % product.step_price !== 0) {
-    return res
-      .status(400)
-      .json({ errs: [http_message.status_400_step_price_bid.message] });
-  }
+  // tạo lịch sử tham gia bid
+  // update số người tham gia sản phẩm, tổng số lượt bid
+  // gửi mail holder trước nếu có
+  await stepAfterValidate(token, price, product_id, product, old_bidder);
 
-  //nếu có giá mua ngay
-  //nếu giá hiện tại >= giá mua ngay thì xong đấu giá
-  if (product.buy_price) {
-    if (price >= product.buy_price && product.buy_price > 1000) {
-      await auction_service.createNewAuction(
-        token.id,
-        product_id,
-        "accepted",
-        price
-      );
-      await product_service.updateShowPrice(product_id, price);
-      await product_service.updateProductStatus(product_id, "off");
+  // nếu có giá mua ngay
+  // và nếu giá hiện tại >= giá mua ngay thì kết thúc đấu giá
+  if (
+    product.buy_price &&
+    +price >= +product.buy_price &&
+    +product.buy_price > 1000
+  ) {
+    // dừng chạy scheduler job dừng lúc expire, vì sẽ dừng ngay
+    await product_scheduler.deleteProductFromAliveArray(product_id);
 
-      // đếm lại số ng tham gia bid
-      const join_count = await auction_service.getCountUserByProductId(
-        product_id
-      );
-      await product_service.updateJoinCount(product_id, +join_count);
+    // chạy các task khi sản phẩm kết thúc + gửi mail cho seller, holder
+    await product_scheduler.whenProductEnd(product_id);
+  } else {
+    // Gia hạn sản phẩm nếu có thể
+    // thời gian lúc bid - expire_at <= 5 phút thì gia hạn 10 phút
+    if (product.auto_extend) {
+      const now = moment().utcOffset(60 * 7);
+      const end = moment(product.expire_at, "DD/MM/YYYY HH:mm:ss");
+      const duration = moment.duration(end.diff(now));
+      const minutes = duration.asMinutes();
+      if (minutes <= 5 && minutes > 0.0) {
+        const new_expire = end.add(10, "minutes").format("DD/MM/YYYY HH:mm:ss");
 
-      // update tăng số lượt bid
-      await product_service.updateIncreaseBidCount(product_id);
+        //update lại expire trong DB của sản phẩm
+        await product_service.updateExpireAt(product_id, new_expire);
 
-      // gửi socket nếu giá bid chạm mốc mua ngay
-      io.boardCast(product_id);
-
-      return res.json({ errs: ["Bạn đã chiến thắng!"] });
-    }
-  }
-
-  if (price <= product.hidden_price) {
-    if (price > product.price) {
-      await auction_service.createNewAuction(
-        token.id,
-        product_id,
-        "accepted",
-        price
-      );
-      await product_service.updateShowPrice(product_id, price);
-
-      // đếm lại số ng tham gia bid
-      const join_count = await auction_service.getCountUserByProductId(
-        product_id
-      );
-      await product_service.updateJoinCount(product_id, +join_count);
-
-      // update tăng số lượt bid
-      await product_service.updateIncreaseBidCount(product_id);
-
-      // Gửi socket khi có người bid = giá người giữ top
-      io.boardCast(product_id);
+        // dừng job đang chạy và tạo job mới dựa vào expire mới
+        await product_scheduler.overWriteJob(product_id, new_expire);
+      }
     }
 
-    return res
-      .status(400)
-      .json({ errs: [http_message.status_400_less_price_bid.message] });
+    // send mail cho seller và bidder (holder mới)
+    if (seller) {
+      await product_scheduler.sendEmailSellerWhenBid(product, seller);
+    }
+    if (bidder) {
+      await product_scheduler.sendEmailNewBidderWhenBid(product, bidder);
+    }
   }
-
-  //nếu pass hết check
-  await auction_service.createNewAuction(
-    token.id,
-    product_id,
-    "accepted",
-    price
-  );
-  await product_service.updateHolderAndHiddenPrice(product_id, token.id, price);
-
-  // đếm lại số ng tham gia bid
-  const join_count = await auction_service.getCountUserByProductId(product_id);
-  await product_service.updateJoinCount(product_id, +join_count);
-
-  // update tăng số lượt bid
-  await product_service.updateIncreaseBidCount(product_id);
 
   //Gửi socket khi bid thành công
   io.boardCast(product_id);
@@ -206,9 +176,43 @@ module.exports.postBidProduct = async (req, res) => {
   return res.json(http_message.status200);
 };
 
-const checkBidderValid = async (user_id, product_id) => {
-  const bidder = await user_service.findUserById(user_id, []);
+const stepAfterValidate = async (
+  token,
+  price,
+  product_id,
+  product,
+  old_bidder
+) => {
+  // tạo lịch sử tham gia
+  await auction_service.createNewAuction(
+    token.id,
+    product_id,
+    "accepted",
+    price
+  );
 
+  // update tên holder và giá mới
+  await product_service.updateHolderAndHiddenPrice(product_id, token.id, price);
+
+  // update lại số người tham gia bid
+  const join_count = await auction_service.getCountUserByProductId(product_id);
+  await product_service.updateJoinCount(product_id, +join_count);
+
+  // update tăng tổng số lượt bid của sản phẩm
+  await product_service.updateIncreaseBidCount(product_id);
+
+  product.bidder_id = token.id;
+  product.hidden_price = +price;
+  product.price = +price;
+
+  // nếu có người giữ giá trước (holder cũ)
+  // gửi email cho người giữ giá cũ biết
+  if (old_bidder && old_bidder.id !== token.id) {
+    await product_scheduler.sendEmailPreviousBidderWhenBid(product, old_bidder);
+  }
+};
+
+const validationBid = async (bidder, product, price) => {
   if (
     (bidder.point_dislike / (bidder.point_dislike + bidder.point_like)) * 100 <
     20
@@ -217,7 +221,7 @@ const checkBidderValid = async (user_id, product_id) => {
   }
 
   const is_blocked = await auction_service.getUserByIdAndStatus(
-    user_id,
+    bidder.id,
     "denied"
   );
 
@@ -225,15 +229,21 @@ const checkBidderValid = async (user_id, product_id) => {
     return { errs: [http_message.status400_blocked_user.message] };
   }
 
-  const product = await product_service.getProductDetails(product_id, []);
-  const now = moment().utcOffset("+07:00");
-
   if (product.status !== "on") {
     return { errs: [http_message.status_400_bid_time_over.message] };
   }
 
+  const now = moment().utcOffset("+07:00");
   if (now > moment(product.expire_at, "DD/MM/YYYY HH:mm:ss")) {
     return { errs: [http_message.status_400_bid_time_over.message] };
+  }
+
+  if (+price <= +product.hidden_price || +price <= +product.start_price) {
+    return { errs: [http_message.status_400_less_price_bid.message] };
+  }
+
+  if (+price % +product.step_price !== 0) {
+    return { errs: [http_message.status_400_step_price_bid.message] };
   }
 
   return null;
@@ -253,8 +263,9 @@ module.exports.postBlockUser = async (req, res) => {
 
   // lấy product kiểm tra xem holder id trùng không
   const product = await product_service.getProductDetails(product_id, []);
+  const bidder = await user_service.findUserById(user_id, []);
 
-  //thay thế nếu đó là holder cao nhất hiện tại trong product, thay user 2nd || null
+  // thay thế nếu đó là holder cao nhất hiện tại trong product, thay user 2nd || null
   if (+product.bidder_id === +user_id) {
     const second_bidder = await auction_service.getSecondPlaceBidder(
       user_id,
@@ -276,7 +287,10 @@ module.exports.postBlockUser = async (req, res) => {
     }
   }
 
-  // gửi socket khi seller block ai đó
+  // gửi email cho bidder bị block
+  await product_scheduler.sendEmailBidderWhenBlocked(product, bidder);
+
+  // gửi socket khi seller block ai đó vì có thể update lại người holder top
   io.boardCast(product_id);
 
   return res.json(http_message.status200);

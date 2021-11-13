@@ -5,6 +5,34 @@ const Op = require("sequelize").Op;
 // moment().utcOffset('+07:00');
 
 // SELECT
+// lấy toàn bộ user_id tham gia bid, distinct
+module.exports.getAllDistinctByproductId = async (
+  product_id = 0,
+  order_by = "bid_at",
+  order_type = "DESC"
+) => {
+  const list = await Auction.findAll({
+    where: { product_id },
+    attributes: [
+      [Sequelize.fn("DISTINCT", Sequelize.col("user_id")), "user_id"],
+    ],
+    order: [[order_by, order_type]],
+  });
+
+  const rs = [];
+  for (const item of list) {
+    const new_item = await this.getManyByUserIdAndProductId(
+      item.user_id,
+      product_id
+    );
+    if (new_item.count > 0) {
+      rs.push(new_item.rows[0]);
+    }
+  }
+
+  return rs;
+};
+
 // lấy toàn bộ lượt bid dựa vào product ID
 module.exports.getAllByProductId = async (
   product_id = 0,

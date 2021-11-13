@@ -2,6 +2,7 @@
 const http_message = require("../../constants/http_message.constant");
 const product_service = require("../../models/Product/Product.service");
 const product_combiner = require("./product.combiner");
+const product_scheduler = require("./product.scheduler");
 const jwt_helper = require("../../helpers/jwt.helper");
 const { handlePagingResponse } = require("../../helpers/etc.helper");
 const io = require("../../helpers/socket.helper");
@@ -87,6 +88,7 @@ module.exports.createProductPost = async (req, res) => {
   }
 
   const new_data = await product_service.createNewProduct(req.body, token.id);
+  await product_scheduler.addNewProductToAliveArray(new_data);
   return res.json(new_data);
 };
 
@@ -106,6 +108,7 @@ module.exports.appendProductDetail = async (req, res) => {
 module.exports.deleteProduct = async (req, res) => {
   const product_id = req.params.id;
   await product_service.deleteProductFake(product_id);
+  await product_scheduler.deleteProductFromAliveArray(product_id);
 
   //gửi socket khi admin gỡ sản phẩm
   io.boardCast(product_id);
