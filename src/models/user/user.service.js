@@ -5,7 +5,7 @@ const Op = require('sequelize').Op;
 const moment = require('moment');
 // moment().utcOffset('+07:00');
 
-module.exports.getAllUser = async (exclude_arr = [], page = null, limit = null) => {
+module.exports.getAllUser = async (exclude_arr = [], page = 1, limit = 9999999) => {
 	page = page ? page : 1;
 	limit = limit ? limit : 9999999999;
 

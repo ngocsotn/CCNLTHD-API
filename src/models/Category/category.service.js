@@ -1,7 +1,7 @@
 const category = require('./category.model');
 
 // SELECT
-module.exports.getAll = async (exclude_arr = [], page = null, limit = null) => {
+module.exports.getAll = async (exclude_arr = [], page = 1, limit = 9999999) => {
 	page = page ? page : 1;
   limit = limit ? limit : 999999999;
 	return await category.findAndCountAll({

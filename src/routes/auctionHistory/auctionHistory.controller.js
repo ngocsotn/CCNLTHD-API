@@ -6,7 +6,7 @@ module.exports.getSelfHistory = async (req, res) => {
 	const token = req.token;
 	const { page, limit, status, order_type } = req.query;
 	const list = await auction_history_service.findByUserId(token.id, page, limit, status, order_type, 'last_bid_at', []);
-  
+
   const rs = handlePagingResponse(list, +page, +limit);
 
   // thêm thông tin sản phẩm chi tiết vào cho từng item...

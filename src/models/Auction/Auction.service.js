@@ -37,7 +37,7 @@ module.exports.getAllDistinctByproductId = async (
 module.exports.getAllByProductId = async (
   product_id = 0,
   page = 1,
-  limit = 10,
+  limit = 99999999,
   order_by = "bid_at",
   order_type = "DESC",
   exclude_arr = []
@@ -62,7 +62,7 @@ module.exports.getAllByProductId = async (
 module.exports.getAllDistinctByUserId = async (
   user_id = 0,
   page = 1,
-  limit = 10,
+  limit = 99999999,
   order_by = "bid_at",
   order_type = "DESC",
   exclude_arr = []
@@ -73,6 +73,11 @@ module.exports.getAllDistinctByUserId = async (
   order_by = order_by ? order_by : "bid_at";
 
   const rs = { count: 0, rows: [] };
+  const count = await Auction.count({
+    distinct: true,
+    col: "product_id",
+    where: { user_id },
+  });
 
   const list = await Auction.findAll({
     where: { user_id },
@@ -92,8 +97,9 @@ module.exports.getAllDistinctByUserId = async (
       "bid_at",
       "DESC"
     );
+
+    rs.count = count;
     if (new_item.count > 0) {
-      rs.count += 1;
       rs.rows.push(new_item.rows[0]);
     }
   }

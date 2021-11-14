@@ -27,7 +27,8 @@ module.exports.getBiddingHistory = async (req, res) => {
     "DESC",
     []
   );
-  const rs = handlePagingResponse(list, page, limit);
+
+  const rs = handlePagingResponse(list, +page, +limit);
   rs.bidder_id = product && product.bidder_id ? product.bidder_id : null;
 
   for (const item of rs.data) {

@@ -6,21 +6,21 @@ const Op = require("sequelize").Op;
 module.exports.findByUserId = async (
   user_id = 0,
   page = 1,
-  limit = 1,
+  limit = 9999999,
   status = null,
   order_type = "DESC",
   order_by = "last_bid_at",
   exclude_arr = []
 ) => {
   page = page ? page : 1;
-  limit = limit ? limit : 999999999;
+  limit = limit ? limit : 9999999;
   status = status ? status : { [Op.ne]: null };
   order_type = order_type ? order_type : "DESC";
   order_by = order_by ? order_by : "last_bid_at";
 
   return await AuctionHistory.findAndCountAll({
     where: {
-      status,
+      status: status,
       user_id,
     },
     attributes: { exclude: exclude_arr },

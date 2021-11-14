@@ -45,7 +45,8 @@ module.exports.getUltimate = async (
   is_expire = 0,
   status = "on"
 ) => {
-  page = page > 0 ? page : 1;
+  page = page ? page : 1;
+  limit= limit ? limit : 999999999;
   sub_category_id = sub_category_id ? sub_category_id : { [Op.ne]: null };
   seller_id = +is_self === 1 ? seller_id : { [Op.ne]: null };
   seller_id = seller_id ? seller_id : { [Op.ne]: null };

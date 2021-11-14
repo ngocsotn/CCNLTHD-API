@@ -13,8 +13,8 @@ module.exports.getDetailsBySubCategoryId = async (sub_category_id) => {
 module.exports.getAllByCategoryId = async (
   category_id,
   exclude_arr,
-  page = null,
-  limit = null
+  page = 1,
+  limit = 9999999
 ) => {
   page = page ? page : 1;
   limit = limit ? limit : 999999999;

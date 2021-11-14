@@ -13,7 +13,7 @@ module.exports.findByUserId = async (user_id, exclude_arr = []) => {
 
 module.exports.findAll = async (
 	page = 1,
-	limit = 1,
+	limit = 99999999,
 	order_by = 'create_at',
 	order_type = 'DESC',
 	status,
