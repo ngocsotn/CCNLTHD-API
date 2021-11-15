@@ -10,13 +10,13 @@ const addFullTextToProduct = () => {
         console.log("FULLTEXT IN PRODUCT ALREADY EXIST, NO NEED TO ADD!\n");
       }
     );
-  }, 6000);
+  }, 2000);
 };
 
 const initProductAliveList = () => {
   setTimeout(() => {
     product_scheduler.init();
-  }, 10000);
+  }, 3000);
 };
 
 module.exports.init = () => {
@@ -25,5 +25,5 @@ module.exports.init = () => {
 
   setTimeout(() => {
     console.log("\nServer is READY to go !!!\n");
-  }, 15000);
+  }, 4000);
 };

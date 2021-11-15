@@ -42,25 +42,36 @@ module.exports.getUltimate = async (
   order_type = "DESC",
   is_self = 0,
   seller_id = null,
-  is_expire = 0,
-  status = "on"
+  is_expire = "",
+  status = ""
 ) => {
   page = page ? page : 1;
-  limit= limit ? limit : 999999999;
+  limit = limit ? limit : 999999999;
   sub_category_id = sub_category_id ? sub_category_id : { [Op.ne]: null };
-  seller_id = +is_self === 1 ? seller_id : { [Op.ne]: null };
+  seller_id = is_self && +is_self === 1 ? seller_id : { [Op.ne]: null };
   seller_id = seller_id ? seller_id : { [Op.ne]: null };
   keyword = keyword ? keyword.split(" ").join(",") : "";
   status = status ? status : { [Op.ne]: null };
   order_type = order_type ? order_type : "DESC";
   order_by = order_by ? order_by : "create_at";
-
   exclude_arr.push("delete");
 
-  const now =
-    +is_expire === 0
-      ? moment().utcOffset(60 * 7)
-      : moment("01/01/2021 00:00:00", "DD/MM/YYYY HH:mm:ss");
+  const now = moment().utcOffset(60 * 7);
+  let expire_condition = { [Op.ne]: null };
+
+  // đã hết hạn
+  if (is_expire !== "" && +is_expire === 1) {
+    expire_condition = {
+      [Op.lt]: now, //less than
+    };
+  } else if (is_expire !== "" && +is_expire === 0) {
+    //chưa hết hạn
+    expire_condition = {
+      [Op.gt]: now, //greater than
+    };
+  } else {
+    expire_condition = { [Op.ne]: null };
+  }
 
   const rs = await Product.findAndCountAll({
     where: [
@@ -69,9 +80,7 @@ module.exports.getUltimate = async (
         sub_category_id,
         delete: false,
         status,
-        expire_at: {
-          [Op.gt]: now, //greater than
-        },
+        expire_at: expire_condition,
       },
       keyword &&
         Sequelize.literal(

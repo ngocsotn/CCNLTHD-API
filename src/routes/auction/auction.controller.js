@@ -118,8 +118,8 @@ module.exports.postBidProduct = async (req, res) => {
   const bidder = await user_service.findUserById(token.id, []);
   const old_bidder =
     (await user_service.findUserById(product.bidder_id)) || null;
-  const is_valid_bidder = await validationBid(bidder, product, price);
 
+  const is_valid_bidder = await validationBid(bidder, product, price);
   if (is_valid_bidder) {
     return res.status(400).json(is_valid_bidder);
   }
@@ -214,10 +214,8 @@ const stepAfterValidate = async (
 };
 
 const validationBid = async (bidder, product, price) => {
-  if (
-    (bidder.point_dislike / (bidder.point_dislike + bidder.point_like)) * 100 <
-    20
-  ) {
+  // >= 0.8 là ok
+  if (+bidder.point_like / (+bidder.point_dislike + +bidder.point_like) < 0.8) {
     return { errs: [http_message.status_400_point_is_low.message] };
   }
 

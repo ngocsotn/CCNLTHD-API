@@ -19,6 +19,8 @@ module.exports.ultimateSearchProduct = async (req, res) => {
     order_by,
     order_type,
     is_self,
+    is_expire,
+    status
   } = req.query;
 
   const list = await product_service.getUltimate(
@@ -31,8 +33,8 @@ module.exports.ultimateSearchProduct = async (req, res) => {
     order_type,
     is_self,
     token.id,
-    0,
-    null
+    is_expire,
+    status
   );
 
   const rs = handlePagingResponse(list, page, limit);
