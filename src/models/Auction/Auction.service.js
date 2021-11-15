@@ -108,9 +108,13 @@ module.exports.getAllDistinctByUserId = async (
 };
 
 // nếu status = denied => ko được bid
-module.exports.getUserByIdAndStatus = async (user_id, status = "accepted") => {
+module.exports.getUserByIdAndStatus = async (
+  user_id,
+  product_id,
+  status = "accepted"
+) => {
   const rs = await Auction.findOne({
-    where: { user_id, status },
+    where: { user_id, product_id, status },
   });
 
   return rs;

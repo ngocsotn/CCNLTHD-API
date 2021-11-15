@@ -1,7 +1,10 @@
 const rate_service = require("../../models/Rate/rate.service");
 const user_service = require("../../models/user/user.service");
 const trade_service = require("../../models/TradeHistory/TradeHistory.service");
-const { handlePagingResponse } = require("../../helpers/etc.helper");
+const {
+  handlePagingResponse,
+  maskUsername,
+} = require("../../helpers/etc.helper");
 const http_message = require("../../constants/http_message.constant");
 const product_combiner = require("../product/product.combiner");
 
@@ -17,6 +20,18 @@ module.exports.getSelfRate = async (req, res) => {
     order_type,
     []
   );
+  for (const item of list.rows) {
+    const user_1 = await user_service.findUserById(item.user_id_1);
+    const user_2 = await user_service.findUserById(item.user_id_2);
+    item.dataValues.user_1 = {
+      note: "Người chủ động đánh giá",
+      name: maskUsername(user_1.name),
+    };
+    item.dataValues.user_2 = {
+      note: "Người được đánh giá",
+      name: maskUsername(user_2.name),
+    };
+  }
 
   const rs = handlePagingResponse(list, page, limit);
   // thêm thông tin sản phẩm chi tiết vào cho từng item...

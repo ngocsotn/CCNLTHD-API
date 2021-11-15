@@ -221,6 +221,7 @@ const validationBid = async (bidder, product, price) => {
 
   const is_blocked = await auction_service.getUserByIdAndStatus(
     bidder.id,
+    product.product_id,
     "denied"
   );
 
@@ -251,7 +252,11 @@ const validationBid = async (bidder, product, price) => {
 //seller
 module.exports.postBlockUser = async (req, res) => {
   const { user_id, product_id } = req.body;
-  const check = await auction_service.getUserByIdAndStatus(user_id, "denied");
+  const check = await auction_service.getUserByIdAndStatus(
+    user_id,
+    product_id,
+    "denied"
+  );
   if (check) {
     return res
       .status(400)
