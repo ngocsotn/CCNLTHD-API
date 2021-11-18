@@ -177,120 +177,108 @@ module.exports.addToAuctionHistory = async (product) => {
 // các hàm send email liên quan sản phẩm, đấu giá
 // khi sản phẩm kết thúc, có winner thì send
 module.exports.sendEmailBidderWhenEnd = async (product, bidder) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Chiến thắng đấu giá",
-      `Chào ${bidder.name}, xin chúc mừng bạn đã chiến thắng đấu giá một sản phẩm trên sàn đấu giá EzBid.`,
-      `Tên sản phẩm: ${product.name}<br>Giá kết thúc: ${product.hidden_price}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Chiến thắng đấu giá",
+    `Chào ${bidder.name}, xin chúc mừng bạn đã chiến thắng đấu giá một sản phẩm trên sàn đấu giá EzBid.`,
+    `Tên sản phẩm: ${product.name}<br>Giá kết thúc: ${product.hidden_price}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Chiến thắng đấu giá",
-      bidder.email,
-      bidder.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Chiến thắng đấu giá",
+    bidder.email,
+    bidder.name,
+    html
+  );
 };
 
 // khi sản phẩm kết thúc, luôn gửi seller
 module.exports.sendEmailSellerWhenEnd = async (product, seller) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Sản phẩm đã kết thúc",
-      `Chào ${seller.name}, một sản phẩm của bạn trên sàn đấu giá EzBid đã kết thúc.`,
-      `Tên sản phẩm: ${product.name}<br>Giá kết thúc: ${product.hidden_price}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Sản phẩm đã kết thúc",
+    `Chào ${seller.name}, một sản phẩm của bạn trên sàn đấu giá EzBid đã kết thúc.`,
+    `Tên sản phẩm: ${product.name}<br>Giá kết thúc: ${product.hidden_price}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Sản phẩm đã kết thúc",
-      seller.email,
-      seller.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Sản phẩm đã kết thúc",
+    seller.email,
+    seller.name,
+    html
+  );
 };
 
 // khi 1 sản phẩm có ai bid cao hơn, gửi cho người giữ giá cũ nếu có
 module.exports.sendEmailPreviousBidderWhenBid = async (product, bidder) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Mất vị trí giữ giá",
-      `Chào ${bidder.name}, một sản phẩm bạn tham gia trên EzBid đã có người đặt giá cao hơn bạn.`,
-      `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Mất vị trí giữ giá",
+    `Chào ${bidder.name}, một sản phẩm bạn tham gia trên EzBid đã có người đặt giá cao hơn bạn.`,
+    `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Mất vị trí giữ giá",
-      bidder.email,
-      bidder.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Mất vị trí giữ giá",
+    bidder.email,
+    bidder.name,
+    html
+  );
 };
 
 // khi ai đó bid thành công sản phẩm, gửi bidder mới
 module.exports.sendEmailNewBidderWhenBid = async (product, bidder) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Đặt giá thành công",
-      `Chào ${bidder.name}, bạn vừa đặt giá thành công một sản phẩm trên EzBid và trở thành người đặt giá cao nhất hiện tại.`,
-      `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Đặt giá thành công",
+    `Chào ${bidder.name}, bạn vừa đặt giá thành công một sản phẩm trên EzBid và trở thành người đặt giá cao nhất hiện tại.`,
+    `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Đặt giá thành công",
-      bidder.email,
-      bidder.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Đặt giá thành công",
+    bidder.email,
+    bidder.name,
+    html
+  );
 };
 
 // khi ai đó bid thành công sản phẩm, gửi seller
 module.exports.sendEmailSellerWhenBid = async (product, seller) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Sản phẩm đang tăng giá",
-      `Chào ${seller.name}, một sản phẩm bạn đăng bán trên EzBid đã có người đặt giá cao hơn.`,
-      `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Sản phẩm đang tăng giá",
+    `Chào ${seller.name}, một sản phẩm bạn đăng bán trên EzBid đã có người đặt giá cao hơn.`,
+    `Tên sản phẩm: ${product.name}<br>Giá lúc này: ${product.hidden_price}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Sản phẩm đang tăng giá",
-      seller.email,
-      seller.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Sản phẩm đang tăng giá",
+    seller.email,
+    seller.name,
+    html
+  );
 };
 
 // khi seller block 1 bidder, gửi mail người đó
 module.exports.sendEmailBidderWhenBlocked = async (product, bidder) => {
-  if (process.env.ON_TEST === "no") {
-    const html = await mailer_helper.replaceHTML(
-      "Bị từ chối ra giá",
-      `Chào ${bidder.name}, rất tiếc bạn đã bị nhà bán hàng từ chối ra giá, hiện bạn sẽ không thể ra giá sản phẩm bên dưới nữa, nhưng bạn vẫn có thể tham gia đấu giá các sản phẩm khác.`,
-      `Tên sản phẩm: ${product.name}`,
-      "",
-      ""
-    );
+  const html = await mailer_helper.replaceHTML(
+    "Bị từ chối ra giá",
+    `Chào ${bidder.name}, rất tiếc bạn đã bị nhà bán hàng từ chối ra giá, hiện bạn sẽ không thể ra giá sản phẩm bên dưới nữa, nhưng bạn vẫn có thể tham gia đấu giá các sản phẩm khác.`,
+    `Tên sản phẩm: ${product.name}`,
+    "XEM NGAY",
+    `${process.env.CLIENT_URL}/detail/${product.product_id}`
+  );
 
-    await mailer_helper.send(
-      "Bị từ chối ra giá",
-      bidder.email,
-      bidder.name,
-      html
-    );
-  }
+  await mailer_helper.send(
+    "Bị từ chối ra giá",
+    bidder.email,
+    bidder.name,
+    html
+  );
 };

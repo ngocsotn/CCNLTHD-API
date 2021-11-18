@@ -45,9 +45,14 @@ module.exports.refreshAccessToken = async (token, refresh_token) => {
 		return '1'; //access token error
 	}
 	const rs = await user_service.findUserById(payload.id);
+
 	if (!rs) {
 		return '1';
 	}
+
+  if(rs.refresh_token ==='block') {
+    return '3';
+  }
 
 	if (rs.refresh_token === refresh_token) {
 		return this.generateAccessToken({ id: payload.id, role: rs.role, active: rs.active });
