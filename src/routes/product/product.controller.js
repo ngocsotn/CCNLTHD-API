@@ -6,11 +6,12 @@ const product_scheduler = require("./product.scheduler");
 const jwt_helper = require("../../helpers/jwt.helper");
 const { handlePagingResponse } = require("../../helpers/etc.helper");
 const io = require("../../helpers/socket.helper");
+const moment = require("moment");
 
 // public
 module.exports.ultimateSearchProduct = async (req, res) => {
   const token = jwt_helper.getPayloadFromHeaderToken(req) || { id: null };
-console.log("\ntoken", token);
+  console.log("\ntoken", token);
   const {
     sub_category_id,
     keyword,
@@ -63,7 +64,17 @@ module.exports.getProductDetails = async (req, res) => {
 module.exports.createProductPost = async (req, res) => {
   const token = req.token;
   const errs = [];
-  const { start_price, step_price, buy_price } = req.body;
+  const { start_price, step_price, buy_price, expire_at } = req.body;
+
+  const now = moment().utcOffset(60 * 7);
+  const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss");
+  const duration = moment.duration(end.diff(now));
+  const minutes = duration.asMinutes();
+  if (minutes < 10) {
+    return res.status(400).json({
+      errs: ["Thời gian kết thúc tối thiểu phải là 10 phút kể từ hiện tại"],
+    });
+  }
 
   if (
     +start_price < 1000 ||
@@ -72,9 +83,8 @@ module.exports.createProductPost = async (req, res) => {
   ) {
     errs.push(http_message.status400_price.message);
   }
-  console.log(start_price + step_price, buy_price);
 
-  if (buy_price && start_price + step_price >= buy_price) {
+  if (buy_price && start_price + step_price > buy_price) {
     errs.push(http_message.status400_buy_price.message);
   }
 
