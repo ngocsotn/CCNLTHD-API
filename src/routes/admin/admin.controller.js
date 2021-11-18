@@ -7,11 +7,20 @@ const { handlePagingResponse } = require("../../helpers/etc.helper");
 module.exports.getAllUser = async (req, res) => {
   const { limit, page } = req.query;
   const list = await user_service.getAllUser(
-    ["password", "code", "refresh_token"],
+    ["password", "code" ],
     page,
     limit
   );
+
   const rs = handlePagingResponse(list, page, limit);
+  for(const item of rs.data) {
+    if(item.refresh_token ==="block") {
+      item.dataValues.status = "block";
+    } else {
+      item.dataValues.status = "ok";
+    }
+    item.dataValues.refresh_token = "";
+  }
 
   return res.json(rs);
 };
