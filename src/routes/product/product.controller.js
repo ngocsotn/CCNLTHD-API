@@ -20,7 +20,7 @@ module.exports.ultimateSearchProduct = async (req, res) => {
     order_type,
     is_self,
     is_expire,
-    status
+    status,
   } = req.query;
 
   const list = await product_service.getUltimate(
@@ -72,8 +72,9 @@ module.exports.createProductPost = async (req, res) => {
   ) {
     errs.push(http_message.status400_price.message);
   }
+  console.log(start_price + step_price, buy_price);
 
-  if (buy_price && +start_price + +step_price >= +buy_price) {
+  if (buy_price && start_price + step_price >= buy_price) {
     errs.push(http_message.status400_buy_price.message);
   }
 
