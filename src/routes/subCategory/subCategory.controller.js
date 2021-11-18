@@ -33,7 +33,11 @@ module.exports.updateSubCategory = async (req, res) => {
     await subCategory_service.updateCategoryId(category_id, sub_category_id);
   }
 
-  return res.json(http_message.status200);
+  const rs = await subCategory_service.getDetailsBySubCategoryId(
+    sub_category_id
+  );
+
+  return res.json(rs);
 };
 
 module.exports.deleteSubCategory = async (req, res) => {
