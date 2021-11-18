@@ -67,7 +67,17 @@ module.exports.adminGetAll = async (req, res) => {
     status,
     []
   );
+
   const rs = handlePagingResponse(list, page, limit);
+  for (const item of rs.data) {
+    const bidder = await user_service.findUserById(item.user_id, [
+      "password",
+      "code",
+      "refresh_token",
+    ]);
+    item.dataValues.name = bidder.name;
+    item.dataValues.email = bidder.email;
+  }
 
   return res.json(rs);
 };
@@ -78,6 +88,7 @@ module.exports.adminGet = async (req, res) => {
   if (!rs) {
     return res.status(204).json({});
   }
+
   return res.json(rs);
 };
 

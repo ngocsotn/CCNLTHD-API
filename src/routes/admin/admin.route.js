@@ -12,17 +12,26 @@ router.put(
   validator(schema.updateUserSchema),
   controller.updateUser
 );
+
 router.post(
   "/password",
   admin(),
   validator(schema.blockOrResetPassword),
   controller.resetPassword
 );
+
 router.post(
   "/block",
   admin(),
   validator(schema.blockOrResetPassword),
   controller.blockUser
+);
+
+router.post(
+  "/unblock",
+  admin(),
+  validator(schema.blockOrResetPassword),
+  controller.unblockUser
 );
 
 module.exports = router;

@@ -2,6 +2,7 @@ const user_service = require("../../models/user/user.service");
 const http_message = require("../../constants/http_message.constant");
 const random_helper = require("../../helpers/random.helper");
 const mailer_helper = require("../../helpers/mailer.helper");
+const jwt_helper = require("../../helpers/jwt.helper");
 const { handlePagingResponse } = require("../../helpers/etc.helper");
 
 module.exports.getAllUser = async (req, res) => {
@@ -120,3 +121,25 @@ module.exports.blockUser = async (req, res) => {
 
   return res.json(http_message.status200);
 };
+
+module.exports.unblockUser = async(req, res) => {
+  const { user_id } = req.body;
+  const rs = await user_service.findUserById(user_id);
+
+  if (rs.refresh_token === "block") {
+    const refresh_token = jwt_helper.generateRefreshToken();
+    await user_service.updateRefreshToken(user_id, refresh_token);
+  }
+
+  const html = await mailer_helper.replaceHTML(
+    "Mở khóa tài khoản",
+    `Chào ${rs.name}, Tài khoản trên EzBid của bạn đã được mở khóa bởi quản trị viên.`,
+    ``,
+    "",
+    ""
+  );
+
+  await mailer_helper.send("Bị khóa tài khoản", rs.email, rs.name, html);
+
+  return res.json(http_message.status200);
+}
