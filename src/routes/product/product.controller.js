@@ -10,7 +10,7 @@ const io = require("../../helpers/socket.helper");
 // public
 module.exports.ultimateSearchProduct = async (req, res) => {
   const token = jwt_helper.getPayloadFromHeaderToken(req) || { id: null };
-
+console.log("\ntoken", token);
   const {
     sub_category_id,
     keyword,

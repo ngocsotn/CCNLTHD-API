@@ -48,8 +48,17 @@ module.exports.getUltimate = async (
   page = page ? page : 1;
   limit = limit ? limit : 999999999;
   sub_category_id = sub_category_id ? sub_category_id : { [Op.ne]: null };
-  seller_id = is_self && is_self == 1 ? seller_id : { [Op.ne]: null };
-  seller_id = seller_id ? seller_id : { [Op.ne]: null };
+
+  if (is_self && (+is_self === 1 || is_self === "1")) {
+    seller_id = +seller_id;
+  } else if (is_self && +is_self === 0) {
+    seller_id = { [Op.ne]: null };
+  } else {
+    seller_id = { [Op.ne]: null };
+  }
+
+  console.log("\n seller_id", seller_id, "\n");
+
   keyword = keyword ? keyword.split(" ").join(",") : "";
   status = status ? status : { [Op.ne]: null };
   order_type = order_type ? order_type : "DESC";
