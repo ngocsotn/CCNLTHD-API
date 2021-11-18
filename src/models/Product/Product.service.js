@@ -57,8 +57,6 @@ module.exports.getUltimate = async (
     seller_id = { [Op.ne]: null };
   }
 
-  console.log("\n seller_id", seller_id, "\n");
-
   keyword = keyword ? keyword.split(" ").join(",") : "";
   status = status ? status : { [Op.ne]: null };
   order_type = order_type ? order_type : "DESC";
