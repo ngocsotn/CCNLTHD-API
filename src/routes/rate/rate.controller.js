@@ -40,7 +40,7 @@ module.exports.getSelfRate = async (req, res) => {
   return res.json(rs);
 };
 
-module.exports.getSelfActiveRate = async(req, res) => {
+module.exports.getSelfActiveRate = async (req, res) => {
   const token = req.token;
   const { page, limit, order_type } = req.query;
 
@@ -70,7 +70,7 @@ module.exports.getSelfActiveRate = async(req, res) => {
   await product_combiner.getAllProductDetailsByIdArray(rs.data);
 
   return res.json(rs);
-}
+};
 
 module.exports.getOtherUserId = async (req, res) => {
   const { page, limit, order_type } = req.query;
@@ -90,6 +90,12 @@ module.exports.getOtherUserId = async (req, res) => {
   }
 
   const rs = handlePagingResponse(list, page, limit);
+  const user = await user_service.findUserById(user_id, []);
+  rs.user = {};
+  rs.user.name = user.name;
+  rs.user.like = user.point_like;
+  rs.user.dislike = user.point_dislike;
+
   // thêm thông tin sản phẩm chi tiết vào cho từng item...
   await product_combiner.getAllProductDetailsByIdArray(rs.data);
 

@@ -38,6 +38,8 @@ module.exports.getBiddingHistory = async (req, res) => {
         "refresh_token",
       ]);
       item.dataValues.name = maskUsername(bidder.name);
+      item.dataValues.like = bidder.point_like;
+      item.dataValues.dislike = bidder.point_dislike;
     }
   }
 
