@@ -12,7 +12,13 @@ const moment = require("moment");
 
 // SELECT
 module.exports.getForScheduler = async () => {
-  const now = moment().utcOffset(7 * 60);
+  const now = moment(
+    moment()
+      .utcOffset(7 * 60)
+      .format("DD/MM/YYYY HH:mm:ss"),
+    "DD/MM/YYYY HH:mm:ss"
+  );
+
   return await Product.findAll({
     where: {
       delete: false,
@@ -72,7 +78,12 @@ module.exports.getUltimate = async (
   order_by = order_by ? order_by : "create_at";
   exclude_arr.push("delete");
 
-  const now = moment().utcOffset(7 * 60);
+  const now = moment(
+    moment()
+      .utcOffset(7 * 60)
+      .format("DD/MM/YYYY HH:mm:ss"),
+    "DD/MM/YYYY HH:mm:ss"
+  );
   let expire_condition = { [Op.ne]: null };
 
   // đã hết hạn

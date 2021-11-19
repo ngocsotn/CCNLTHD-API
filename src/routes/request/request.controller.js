@@ -15,7 +15,12 @@ module.exports.bidderGet = async (req, res) => {
   }
 
   // nếu đang chờ + đã quá hạn -> cho tạo rq mới
-  const now = moment().utcOffset(7 * 60);
+  const now = moment(
+    moment()
+      .utcOffset(7 * 60)
+      .format("DD/MM/YYYY HH:mm:ss"),
+    "DD/MM/YYYY HH:mm:ss"
+  );
   if (
     rs.status !== "accepted" &&
     now > moment(rs.expire_at, "DD/MM/YYYY").utcOffset(0)
@@ -133,7 +138,12 @@ module.exports.adminPut = async (req, res) => {
   }
 
   const rs = await request_service.findByUserId(user_id, []);
-  const now = moment().utcOffset(7 * 60);
+  const now = moment(
+    moment()
+      .utcOffset(7 * 60)
+      .format("DD/MM/YYYY HH:mm:ss"),
+    "DD/MM/YYYY HH:mm:ss"
+  );
 
   if (
     rs.status !== "pending" ||

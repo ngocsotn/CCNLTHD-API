@@ -27,7 +27,12 @@ module.exports.init = async () => {
 
 // seller thêm product mới
 module.exports.addNewProductToAliveArray = async (product) => {
-  const now = moment().utcOffset(7 * 60);
+  const now = moment(
+    moment()
+      .utcOffset(7 * 60)
+      .format("DD/MM/YYYY HH:mm:ss"),
+    "DD/MM/YYYY HH:mm:ss"
+  );
   if (
     product.expire_at &&
     now < moment(product.expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(0)
