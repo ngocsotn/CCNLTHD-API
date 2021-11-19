@@ -56,8 +56,10 @@ module.exports.getUltimate = async (
   } else {
     seller_id = { [Op.ne]: null };
   }
-  keyword = keyword.split('"').join("");
-  keyword = keyword.split("'").join("")
+  if (keyword) {
+    keyword = keyword.split('"').join("");
+    keyword = keyword.split("'").join("");
+  }
 
   if (keyword && keyword.length > 0) {
     keyword = keyword ? keyword.split(" ").join(",") : null;

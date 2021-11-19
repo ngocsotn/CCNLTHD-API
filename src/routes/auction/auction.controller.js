@@ -101,6 +101,15 @@ module.exports.postBuyNow = async (req, res) => {
   // dừng chạy scheduler job dừng lúc expire, vì sẽ dừng ngay lúc này
   await product_scheduler.deleteProductFromAliveArray(product_id);
 
+  //cập nhật lại expire = now
+  const now = moment()
+    .utcOffset(60 * 7)
+    .subtract(1, "minutes");
+  await product_service.updateExpireAt(
+    product_id,
+    now.format("DD/MM/YYYY HH:mm:ss")
+  );
+
   // chạy các task khi sản phẩm kết thúc + gửi mail cho seller, holder
   await product_scheduler.whenProductEnd(product_id);
 
@@ -142,6 +151,15 @@ module.exports.postBidProduct = async (req, res) => {
   ) {
     // dừng chạy scheduler job dừng lúc expire, vì sẽ dừng ngay
     await product_scheduler.deleteProductFromAliveArray(product_id);
+
+    //cập nhật lại expire = now
+    const now = moment()
+      .utcOffset(60 * 7)
+      .subtract(1, "minutes");
+    await product_service.updateExpireAt(
+      product_id,
+      now.format("DD/MM/YYYY HH:mm:ss")
+    );
 
     // chạy các task khi sản phẩm kết thúc + gửi mail cho seller, holder
     await product_scheduler.whenProductEnd(product_id);
