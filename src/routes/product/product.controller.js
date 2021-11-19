@@ -184,7 +184,7 @@ module.exports.appendProductDetail = async (req, res) => {
   //gửi socket khi seller update thêm đuôi chi tiết sản phẩm
   io.boardCast(product_id);
 
-  return res.json(rs);
+  return res.json(product);
 };
 
 // admin
