@@ -104,7 +104,7 @@ module.exports.createProductPost = async (req, res) => {
   const now = moment().utcOffset(7 * 60);
   console.log("now ", now.format("DD/MM/YYYY HH:mm:ss"));
 
-  const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(7 * 60);
+  const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(0);
   console.log("end", end.format("DD/MM/YYYY HH:mm:ss"));
   const duration = moment.duration(end.diff(now));
   const minutes = duration.asMinutes();
