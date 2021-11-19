@@ -167,7 +167,7 @@ module.exports.postBidProduct = async (req, res) => {
     // Gia hạn sản phẩm nếu có thể
     // thời gian lúc bid - expire_at <= 5 phút thì gia hạn 10 phút
     if (product.auto_extend) {
-      const now = moment().utcOffset(60 * 7);
+      const now = moment().utcOffset(0).add(7, "hours");
       const end = moment(product.expire_at, "DD/MM/YYYY HH:mm:ss");
       const duration = moment.duration(end.diff(now));
       const minutes = duration.asMinutes();

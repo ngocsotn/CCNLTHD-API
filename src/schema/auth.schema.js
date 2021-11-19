@@ -39,7 +39,7 @@ exports.recoverySchema = {
 	type: 'object',
 	properties: {
 		password: { type: 'string', minLength: 5 },
-		code: { type: 'string', minLength: 10 }
+		code: { type: 'string', minLength: 5 }
 	},
 
 	required: [ 'password', 'code' ],

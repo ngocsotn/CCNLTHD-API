@@ -101,15 +101,10 @@ module.exports.createProductPost = async (req, res) => {
   const errs = [];
   const { start_price, step_price, buy_price, expire_at } = req.body;
 
-  const now = moment().utcOffset(60 * 7);
+  const now = moment().utcOffset(0).add(7, "hours");
   console.log("now ", now.format("DD/MM/YYYY HH:mm:ss"));
   console.log("now without utcoffset", moment().format("DD/MM/YYYY HH:mm:ss"));
-  console.log(
-    "now with utcoffset",
-    moment()
-      .utcOffset(60 * 7)
-      .format("DD/MM/YYYY HH:mm:ss")
-  );
+
   const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss");
   console.log("end", end.format("DD/MM/YYYY HH:mm:ss"));
   const duration = moment.duration(end.diff(now));
