@@ -106,7 +106,12 @@ module.exports.createProductPost = async (req, res) => {
   const duration = moment.duration(end.diff(now));
   const minutes = duration.asMinutes();
 
-  if (minutes < 10.0) {
+  console.log("\nminutes", minutes);
+  console.log("\nminutes < 10.0", minutes < 10.0);
+  console.log("now >= end", now >= end);
+  console.log("now.add(9, minutes) >= end", now.add(9, "minutes") >= end);
+
+  if (minutes < 10.0 || now >= end || now.add(9, "minutes") >= end) {
     errs.push("Thời gian kết thúc tối thiểu phải là 10 phút kể từ hiện tại");
   }
 
