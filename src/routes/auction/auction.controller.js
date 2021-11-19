@@ -167,8 +167,8 @@ module.exports.postBidProduct = async (req, res) => {
     // Gia hạn sản phẩm nếu có thể
     // thời gian lúc bid - expire_at <= 5 phút thì gia hạn 10 phút
     if (product.auto_extend) {
-      const now = moment().utcOffset(0).add(7, "hours");
-      const end = moment(product.expire_at, "DD/MM/YYYY HH:mm:ss");
+      const now = moment().utcOffset(7*60);
+      const end = moment(product.expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(7*60);
       const duration = moment.duration(end.diff(now));
       const minutes = duration.asMinutes();
       if (minutes <= 5 && minutes > 0.0) {
@@ -258,8 +258,8 @@ const validationBid = async (bidder, product, price) => {
     return { errs: [http_message.status_400_bid_time_over.message] };
   }
 
-  const now = moment().utcOffset("+07:00");
-  if (now > moment(product.expire_at, "DD/MM/YYYY HH:mm:ss")) {
+  const now = moment().utcOffset(7*60);
+  if (now > moment(product.expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(7*60)) {
     return { errs: [http_message.status_400_bid_time_over.message] };
   }
 

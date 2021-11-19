@@ -15,8 +15,8 @@ module.exports.bidderGet = async (req, res) => {
   }
 
   // nếu đang chờ + đã quá hạn -> cho tạo rq mới
-  const now = moment().utcOffset("+07:00");
-  if (rs.status !== "accepted" && now > moment(rs.expire_at, "DD/MM/YYYY")) {
+  const now = moment().utcOffset(7*60);
+  if (rs.status !== "accepted" && now > moment(rs.expire_at, "DD/MM/YYYY").utcOffset(7*60)) {
     return res.status(204).json({});
   }
 
@@ -130,9 +130,9 @@ module.exports.adminPut = async (req, res) => {
   }
 
   const rs = await request_service.findByUserId(user_id, []);
-  const now = moment().utcOffset("+07:00");
+  const now = moment().utcOffset(7*60);
 
-  if (rs.status !== "pending" || now > moment(rs.expire_at, "DD/MM/YYYY")) {
+  if (rs.status !== "pending" || now > moment(rs.expire_at, "DD/MM/YYYY").utcOffset(7*60)) {
     return res
       .status(400)
       .json({ errs: ["Yêu cầu này đã duyệt/từ chối hoặc đã hết hiệu lực"] });

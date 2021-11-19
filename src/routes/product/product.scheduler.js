@@ -27,10 +27,10 @@ module.exports.init = async () => {
 
 // seller thêm product mới
 module.exports.addNewProductToAliveArray = async (product) => {
-  const now = moment().utcOffset(0).add(7, "hours");
+  const now = moment().utcOffset(7*60);
   if (
     product.expire_at &&
-    now < moment(product.expire_at, "DD/MM/YYYY HH:mm:ss")
+    now < moment(product.expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(7*60)
   ) {
     product_dict[product.product_id] = {};
     product_dict[product.product_id].expire_at = product.expire_at;

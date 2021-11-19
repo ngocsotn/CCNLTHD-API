@@ -101,23 +101,24 @@ module.exports.createProductPost = async (req, res) => {
   const errs = [];
   const { start_price, step_price, buy_price, expire_at } = req.body;
 
-  const now = moment().utcOffset(0).add(7, "hours");
+  const now = moment().utcOffset(7 * 60);
   console.log("now ", now.format("DD/MM/YYYY HH:mm:ss"));
-  console.log("now without utcoffset", moment().format("DD/MM/YYYY HH:mm:ss"));
 
-  const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss");
+  const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss").utcOffset(7 * 60);
   console.log("end", end.format("DD/MM/YYYY HH:mm:ss"));
   const duration = moment.duration(end.diff(now));
   const minutes = duration.asMinutes();
 
   console.log("\nminutes", minutes);
-  console.log("\nminutes < 10.0", minutes < 10.0);
+  console.log("minutes < 10.0", minutes < 10.0);
   console.log("now >= end", now >= end);
-  console.log("now.add(9, minutes) >= end", now.add(9, "minutes") >= end);
 
-  if (minutes < 10.0 || now >= end || now.add(9, "minutes") >= end) {
+  if (minutes < 10.0 || now >= end) {
+    errs.push("Thời gian kết thúc tối thiểu phải là 10 phút kể từ hiện tại");
+  } else if(now.add(8, "minutes") >= end) {
     errs.push("Thời gian kết thúc tối thiểu phải là 10 phút kể từ hiện tại");
   }
+  console.log("now (add 8 mins) >= end", now >= end, "\n");
 
   if (
     +start_price < 1000 ||
