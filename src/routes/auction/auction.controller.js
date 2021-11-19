@@ -215,8 +215,13 @@ const stepAfterValidate = async (
 
 const validationBid = async (bidder, product, price) => {
   // >= 0.8 là ok
-  if (+bidder.point_like / (+bidder.point_dislike + +bidder.point_like) < 0.8) {
-    return { errs: [http_message.status_400_point_is_low.message] };
+  if (bidder.point_like + bidder.point_dislike > 0) {
+    if (
+      +bidder.point_like / (+bidder.point_dislike + +bidder.point_like) <
+      0.8
+    ) {
+      return { errs: [http_message.status_400_point_is_low.message] };
+    }
   }
 
   const is_blocked = await auction_service.getUserByIdAndStatus(
