@@ -56,8 +56,15 @@ module.exports.getUltimate = async (
   } else {
     seller_id = { [Op.ne]: null };
   }
+  keyword = keyword.split('"').join("");
+  keyword = keyword.split("'").join("")
 
-  keyword = keyword ? keyword.split(" ").join(",") : "";
+  if (keyword && keyword.length > 0) {
+    keyword = keyword ? keyword.split(" ").join(",") : null;
+  } else {
+    keyword = null;
+  }
+
   status = status ? status : { [Op.ne]: null };
   order_type = order_type ? order_type : "DESC";
   order_by = order_by ? order_by : "create_at";
