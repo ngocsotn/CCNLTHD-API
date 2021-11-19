@@ -40,6 +40,38 @@ module.exports.getSelfRate = async (req, res) => {
   return res.json(rs);
 };
 
+module.exports.getSelfActiveRate = async(req, res) => {
+  const token = req.token;
+  const { page, limit, order_type } = req.query;
+
+  const list = await rate_service.findAllByUserId1(
+    token.id,
+    page,
+    limit,
+    "create_at",
+    order_type,
+    []
+  );
+  for (const item of list.rows) {
+    const user_1 = await user_service.findUserById(item.user_id_1);
+    const user_2 = await user_service.findUserById(item.user_id_2);
+    item.dataValues.user_1 = {
+      note: "Người chủ động đánh giá",
+      name: maskUsername(user_1.name),
+    };
+    item.dataValues.user_2 = {
+      note: "Người được đánh giá",
+      name: maskUsername(user_2.name),
+    };
+  }
+
+  const rs = handlePagingResponse(list, page, limit);
+  // thêm thông tin sản phẩm chi tiết vào cho từng item...
+  await product_combiner.getAllProductDetailsByIdArray(rs.data);
+
+  return res.json(rs);
+}
+
 module.exports.getOtherUserId = async (req, res) => {
   const { page, limit, order_type } = req.query;
   const user_id = req.params.id;

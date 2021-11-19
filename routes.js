@@ -21,6 +21,7 @@ router.use('/user', require('./src/routes/admin/admin.route'));
 router.use('/request', require('./src/routes/request/request.route'));
 router.use('/favorite', require('./src/routes/favorite/favorite.route'));
 router.use('/rate', require('./src/routes/rate/rate.route'));
+router.use('/rate-active', require('./src/routes/rate/rateActive.route'));
 router.use('/history', require('./src/routes/auctionHistory/auctionHistory.route'));
 router.use('/trade', require('./src/routes/tradeHistory/tradeHistory.route'));
 router.use('/bid', require('./src/routes/auction/auction.route'));

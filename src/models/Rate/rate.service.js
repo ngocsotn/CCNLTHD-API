@@ -27,6 +27,29 @@ module.exports.findAllByUserId2 = async (
   });
 };
 
+//xem bản thân đánh giá ng khác
+module.exports.findAllByUserId1 = async (
+  user_id_1 = 0,
+  page = 1,
+  limit = 9999999,
+  order_by = "create_at",
+  order_type = "DESC",
+  exclude_arr = []
+) => {
+  page = page ? page : 1;
+  limit = limit ? limit : 999999999;
+  order_type = order_type ? order_type : "DESC";
+  order_by = order_by ? order_by : "create_At";
+
+  return await rate.findAndCountAll({
+    where: { user_id_1 },
+    attributes: { exclude: exclude_arr },
+    offset: (+page - 1) * +limit,
+    limit: +limit,
+    order: [[order_by, order_type]],
+  });
+};
+
 module.exports.findAllByUserId1AndProductId = async (user_id_1, product_id) => {
   return await rate.findOne({
     where: {
