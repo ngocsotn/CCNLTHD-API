@@ -107,7 +107,7 @@ module.exports.createProductPost = async (req, res) => {
       .format("DD/MM/YYYY HH:mm:ss"),
     "DD/MM/YYYY HH:mm:ss"
   );
-  
+
   console.log("now ", now.format("DD/MM/YYYY HH:mm:ss"));
 
   const end = moment(expire_at, "DD/MM/YYYY HH:mm:ss");
@@ -159,11 +159,11 @@ module.exports.appendProductDetail = async (req, res) => {
   const token = req.token;
   const { detail, product_id } = req.body;
   await product_service.updateAppendDetail(detail, product_id, token.id);
-  const rs = await product_service.getProductDetails(product_id, []);
+  const product = await product_service.getProductDetails(product_id, []);
 
   // gửi email cho người giữ giá cao nhất nếu có
-  if (rs.bidder_id) {
-    const bidder = await user_service.findUserById(rs.bidder_id);
+  if (product.bidder_id) {
+    const bidder = await user_service.findUserById(product.bidder_id);
 
     const html = await mailer_helper.replaceHTML(
       "Sản phâm có thêm mô tả",
