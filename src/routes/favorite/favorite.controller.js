@@ -24,6 +24,19 @@ module.exports.getSelfFavorite = async (req, res) => {
   const token = req.token;
   const { page, limit, order_type } = req.query;
 
+  const order_type_accept = ["ASC", "DESC"];
+  if (
+    order_type &&
+    order_type !== "" &&
+    !order_type_accept.includes(order_type)
+  ) {
+    return res.status(400).json({
+      errs: [
+        "order_type phải là 1 trong những: " + order_type_accept.join(", "),
+      ],
+    });
+  }
+
   const list = await favorite_service.findAllByUserId(
     token.id,
     page,

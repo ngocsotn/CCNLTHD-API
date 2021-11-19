@@ -68,6 +68,33 @@ module.exports.adminGetAll = async (req, res) => {
     []
   );
 
+  const status_accept = ["pending", "accepted", "denied"];
+  if (status && status !== "" && !status_accept.includes(status)) {
+    return res.status(400).json({
+      errs: ["status phải là 1 trong những: " + status_accept.join(", ")],
+    });
+  }
+
+  const order_type_accept = ["ASC", "DESC"];
+  if (
+    order_type &&
+    order_type !== "" &&
+    !order_type_accept.includes(order_type)
+  ) {
+    return res.status(400).json({
+      errs: [
+        "order_type phải là 1 trong những: " + order_type_accept.join(", "),
+      ],
+    });
+  }
+
+  const order_by_accept = ["create_at", "expire_at"];
+  if (order_by && order_by !== "" && !order_by_accept.includes(order_by)) {
+    return res.status(400).json({
+      errs: ["order_by phải là 1 trong những: " + order_by_accept.join(", ")],
+    });
+  }
+
   const rs = handlePagingResponse(list, page, limit);
   for (const item of rs.data) {
     const bidder = await user_service.findUserById(item.user_id, [
@@ -94,6 +121,14 @@ module.exports.adminGet = async (req, res) => {
 
 module.exports.adminPut = async (req, res) => {
   const { user_id, status } = req.body;
+
+  const status_accept = ["accepted", "denied"];
+  if (status && status !== "" && !status_accept.includes(status)) {
+    return res.status(400).json({
+      errs: ["status phải là 1 trong những: " + status_accept.join(", ")],
+    });
+  }
+
   const rs = await request_service.findByUserId(user_id, []);
   const now = moment().utcOffset("+07:00");
 

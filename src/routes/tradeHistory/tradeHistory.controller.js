@@ -22,6 +22,28 @@ module.exports.sellerGetTrade = async (req, res) => {
 	const token = req.token;
 	const { page, limit, status, order_type } = req.query;
 
+  const status_accept = ["pending", "accepted", "denied"];
+  if (status && status !== "" && !status_accept.includes(status)) {
+    return res.status(400).json({
+      errs: ["status phải là 1 trong những: " + status_accept.join(", ")],
+    });
+  }
+
+  const order_type_accept = ["ASC", "DESC"];
+  if (
+    order_type &&
+    order_type !== "" &&
+    !order_type_accept.includes(order_type)
+  ) {
+    return res.status(400).json({
+      errs: [
+        "order_type phải là 1 trong những: " + order_type_accept.join(", "),
+      ],
+    });
+  }
+
+
+
 	const list = await trade_history_service.findBySellerId(token.id, page, limit, status, order_type, 'create_at', []);
 	const rs = handlePagingResponse(list, page, limit);
 	await product_combiner.getAllProductDetailsByIdArray(rs.data);

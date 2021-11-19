@@ -1,8 +1,10 @@
 // controller sẽ gọi hàm từ product.complete.js có sẵn
 const http_message = require("../../constants/http_message.constant");
 const product_service = require("../../models/Product/Product.service");
+const user_service = require("../../models/user/user.service");
 const product_combiner = require("./product.combiner");
 const product_scheduler = require("./product.scheduler");
+const mailer_helper = require("../../helpers/mailer.helper");
 const jwt_helper = require("../../helpers/jwt.helper");
 const { handlePagingResponse } = require("../../helpers/etc.helper");
 const io = require("../../helpers/socket.helper");
@@ -23,6 +25,39 @@ module.exports.ultimateSearchProduct = async (req, res) => {
     is_expire,
     status,
   } = req.query;
+
+  const status_accept = ["on", "off"];
+  if (status && status !== "" && !status_accept.includes(status)) {
+    return res.status(400).json({
+      errs: ["status phải là 1 trong những: " + status_accept.join(", ")],
+    });
+  }
+
+  const order_by_accept = [
+    "create_at",
+    "expire_at",
+    "hidden_price",
+    "buy_price",
+    "start_price",
+  ];
+  if (order_by && order_by !== "" && !order_by_accept.includes(order_by)) {
+    return res.status(400).json({
+      errs: ["order_by phải là 1 trong những: " + order_by_accept.join(", ")],
+    });
+  }
+
+  const order_type_accept = ["ASC", "DESC"];
+  if (
+    order_type &&
+    order_type !== "" &&
+    !order_type_accept.includes(order_type)
+  ) {
+    return res.status(400).json({
+      errs: [
+        "order_type phải là 1 trong những: " + order_type_accept.join(", "),
+      ],
+    });
+  }
 
   const list = await product_service.getUltimate(
     sub_category_id,
@@ -110,6 +145,26 @@ module.exports.appendProductDetail = async (req, res) => {
   const { detail, product_id } = req.body;
   await product_service.updateAppendDetail(detail, product_id, token.id);
   const rs = await product_service.getProductDetails(product_id, []);
+
+  // gửi email cho người giữ giá cao nhất nếu có
+  if (rs.bidder_id) {
+    const bidder = await user_service.findUserById(rs.bidder_id);
+
+    const html = await mailer_helper.replaceHTML(
+      "Sản phâm có thêm mô tả",
+      `Chào ${bidder.name}, Một sản phẩm trên sàn EzBid mà bạn đang giữ giá vừa có thêm mô tả từ người bán.`,
+      `Tên sản phẩm: ${product.name}`,
+      "XEM NGAY",
+      `${process.env.CLIENT_URL}/detail/${product.product_id}`
+    );
+
+    await mailer_helper.send(
+      "Sản phâm có thêm mô tả",
+      bidder.email,
+      bidder.name,
+      html
+    );
+  }
 
   //gửi socket khi seller update thêm đuôi chi tiết sản phẩm
   io.boardCast(product_id);
