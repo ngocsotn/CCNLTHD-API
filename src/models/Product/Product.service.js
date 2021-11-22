@@ -216,14 +216,14 @@ module.exports.updateHolderAndHiddenPrice = async (
   user_id,
   hidden_price
 ) => {
-  const rs = await this.getProductDetails(product_id, []);
-  const price = Math.min(hidden_price, rs.hidden_price + rs.step_price);
+  //const rs = await this.getProductDetails(product_id, []);
+  //const price = Math.min(hidden_price, rs.hidden_price + rs.step_price);
 
   await Product.update(
     {
       bidder_id: user_id,
       hidden_price: hidden_price,
-      price: price,
+      price: hidden_price, //price
     },
     {
       where: { product_id },

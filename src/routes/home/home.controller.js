@@ -6,7 +6,7 @@ module.exports.getSelfHistory = async (req, res) => {
 	const rs = {};
 
 	// 5 sản phẩm có giá cao nhất
-	const list_price = await product_service.getUltimate(null, null, [], 1, 5, 'price', 'DESC', 0, null, 0, 'on');
+	const list_price = await product_service.getUltimate(null, null, [], 1, 5, 'hidden_price', 'DESC', 0, null, 0, 'on');
 	if (list_price) {
 		rs.price = await product_combiner.addFieldForArrayProduct(list_price.rows);
 	}
