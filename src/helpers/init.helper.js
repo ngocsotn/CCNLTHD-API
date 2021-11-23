@@ -22,8 +22,4 @@ const initProductAliveList = () => {
 module.exports.init = () => {
   addFullTextToProduct();
   initProductAliveList();
-
-  setTimeout(() => {
-    console.log("\nServer is READY to go !!!\n");
-  }, 15000); // 15000
 };

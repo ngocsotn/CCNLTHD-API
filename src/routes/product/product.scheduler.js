@@ -17,7 +17,7 @@ module.exports.product_dict = product_dict;
 // các hàm chính
 // khởi tạo lúc server chạy
 module.exports.init = async () => {
-  console.log("INIT PRODUCT SCHEDULER \n");
+  console.log("INITIALIZING PRODUCT SCHEDULER NOW\n");
   const list = await product_service.getForScheduler();
 
   for (const item of list) {

@@ -32,11 +32,18 @@ const server = require("http").Server(app);
 
 db.sync()
   .then(() => {
-    server.listen(port, () => {
-      console.log(`\nServer is listening on port ${port}`);
-      console.log("But Please wait a few seconds for setting up (init)\n");
-      io.initSocket(server);
-    });
+    console.log(`\nSERVER WILL LISTEN ON ${port}`);
+    console.log(
+      `NOW, PLEASE WAIT ${process.env.SERVER_INIT_TIME} SECONDS FOR SETTING UP THE SERVER\n`
+    );
+
+    io.initSocket(server);
+
+    setTimeout(() => {
+      server.listen(port, () => {
+        console.log(`\nSERVER IS GOOD TO GO, LISTENING ON ${port}`);
+      });
+    }, +process.env.SERVER_INIT_TIME * 1000); // 15000
   })
   .catch((err) => {
     console.log(err);
